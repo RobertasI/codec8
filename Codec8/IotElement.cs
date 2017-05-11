@@ -9,6 +9,6 @@ namespace Codec8
 {
     class IotElement
     {
-        Dictionary<string, int> st = new Dictionary<string, int>();
+        //Dictionary<string, int> st = new Dictionary<string, int>();
     }
 }

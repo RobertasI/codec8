@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Codec8
 {
-    class StringConverter
+    public static class StringConverter
     {
-        public StringConverter()
-        {
-
-        }
+ 
 
         public static byte[] StringToByteArray()
         {
@@ -21,6 +18,11 @@ namespace Codec8
                              .Where(x => x % 2 == 0)
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                              .ToArray();
+        }
+
+        public static byte[] ReadBytes(this byte[] bytesArray, int skip, int take)
+        {
+            return bytesArray.Skip(skip).Take(take).ToArray();
         }
     }
 }
