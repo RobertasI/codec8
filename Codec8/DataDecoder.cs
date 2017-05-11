@@ -13,6 +13,14 @@ namespace Codec8
 
             int numberOfData = getNumberOfData();
             Console.WriteLine(numberOfData);
+
+            for (int i = 0; i < getNumberOfData(); i++)
+            {
+
+
+
+            }
+
         }
 
         byte[] byteArray = StringConverter.StringToByteArray();
@@ -30,4 +38,5 @@ namespace Codec8
         }
 
     }
+
 }
