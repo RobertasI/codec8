@@ -9,9 +9,12 @@ namespace Codec8
     {
         public static void Main()
         {
-            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), 1, 2),0);
+            //int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), 1, 2),0);
+
+            int numberOfData = getNumberOfData();
             Console.WriteLine(numberOfData);
         }
+
         byte[] byteArray = StringConverter.StringToByteArray();
         Stream stream = new MemoryStream(StringConverter.StringToByteArray());
         ReversedBinaryReader reversedbinary = new ReversedBinaryReader(new MemoryStream(StringConverter.StringToByteArray()));
@@ -19,11 +22,11 @@ namespace Codec8
        // var numberOfRecords = Convert.ToInt16(hexBytes.ReadBytes(_currentByte, 1)[0]);
 
 
-        public void getNubmerOfData()
+        public static int getNumberOfData()
         {
             int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), 1, 2), 0);
-            Console.WriteLine(numberOfData);
-          
+            //Console.WriteLine(numberOfData);
+            return numberOfData;
         }
 
     }
