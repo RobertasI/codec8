@@ -9,42 +9,33 @@ namespace Codec8
 {
     public class ReversedBinaryReader : BinaryReader
     {
-        //private byte[] a16 = new byte[2];
-        private byte[] a32 = new byte[4];
-        private byte[] a64 = new byte[8];
 
-        public ReversedBinaryReader(System.IO.Stream stream)  : base(stream)
+        public ReversedBinaryReader(Stream stream)  : base(stream)
         {
 
-
         }
-
 
 
         public override int ReadInt32()
         {
-            a32 = base.ReadBytes(4);
+            byte[] a32 = base.ReadBytes(4);
             Array.Reverse(a32);
             return BitConverter.ToInt32(a32, 0);
         }
 
-        public  Int16 ReadInt16(byte[] a16)
+        public override short ReadInt16()
         {
-            a16 = base.ReadBytes(2);
+            byte[] a16 = base.ReadBytes(2);
             Array.Reverse(a16);
             return BitConverter.ToInt16(a16, 0);
         }
-        public override Int64 ReadInt64()
+
+
+        public override long ReadInt64()
         {
-            a64 = base.ReadBytes(8);
+            byte[] a64 = base.ReadBytes(8);
             Array.Reverse(a64);
             return BitConverter.ToInt64(a64, 0);
-        }
-        public override UInt32 ReadUInt32()
-        {
-            a32 = base.ReadBytes(4);
-            Array.Reverse(a32);
-            return BitConverter.ToUInt32(a32, 0);
         }
     }
 }

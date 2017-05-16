@@ -9,10 +9,12 @@ namespace Codec8
     {
         public static void Main()
         {
-            var _currentByte = 1;
+
+            int _currentByte = 1;
+
 
             int numberOfData = getNumberOfData();
-            Console.WriteLine(numberOfData);
+            Console.WriteLine("Number of data: " + numberOfData);
 
             _currentByte += 1;
 
@@ -20,19 +22,21 @@ namespace Codec8
             {
                 var gpsElement = new GpsElement();
 
+                ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(StringConverter.StringToByteArray(), _currentByte, 8)));
 
+                var timeStamp = rb.ReadInt64();
 
-                var timeStamp = ReversedBinaryReader.ReadInt64
+                DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
+
+                long cdrTimestamp = timeStamp;
+
+                DateTime result = epochStart.AddMilliseconds(cdrTimestamp);
+
+                Console.WriteLine("Time: " + result);
 
             }
 
         }
-
-        //byte[] byteArray = StringConverter.StringToByteArray();
-        //Stream stream = new MemoryStream(StringConverter.StringToByteArray());
-        //ReversedBinaryReader reversedbinary = new ReversedBinaryReader(new MemoryStream(StringConverter.StringToByteArray()));
-
-       // var numberOfRecords = Convert.ToInt16(hexBytes.ReadBytes(_currentByte, 1)[0]);
 
 
         public static int getNumberOfData()
