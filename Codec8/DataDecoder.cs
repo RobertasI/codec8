@@ -37,6 +37,7 @@ namespace Codec8
                 //skippig priority
                 _currentByte += 1;
 
+                
                 ReversedBinaryReader rb1 = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(StringConverter.StringToByteArray(), _currentByte, 4)));
                 gpsElement.Longitude = rb1.ReadInt32();
                 Console.WriteLine("Longitude: " + gpsElement.Longitude);
@@ -57,6 +58,33 @@ namespace Codec8
                 Console.WriteLine("Angle: " + gpsElement.Angle);
                 _currentByte += 2;
 
+                gpsElement.Satellites = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), _currentByte, 2), 0);
+                Console.WriteLine("Satellites: " + gpsElement.Satellites);
+                _currentByte += 1;
+
+                ReversedBinaryReader rb5 = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(StringConverter.StringToByteArray(), _currentByte, 2)));
+                gpsElement.Speed = rb5.ReadInt16();
+                Console.WriteLine("Speed: " + gpsElement.Speed);
+                _currentByte += 2;
+
+                //var eventId = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), _currentByte, 2), 0);
+                //Console.WriteLine("IO element ID of  Event generated: " + eventId);
+                _currentByte += 1;
+
+
+                //skipping all IO records
+                _currentByte += 1;
+
+
+                int oneByteElements = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), _currentByte, 2), 0);
+                Console.WriteLine("one byte elements: " + oneByteElements);
+
+                ReversedBinaryReader rb6 = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(StringConverter.StringToByteArray(), _currentByte, 2)));
+                int oneByteElements2 = rb6.ReadInt16();
+                Console.WriteLine("one byte elements2: " + oneByteElements2);
+                _currentByte += 2;
+
+                //for (int j = 0; j)
             }
 
         }
