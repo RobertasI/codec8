@@ -87,7 +87,7 @@ namespace Codec8
                         Console.WriteLine("IO element ID = " + oneByteID);
                         _currentByte += 1;
 
-                        byte oneByteValue = rb.ReadByte();
+                        int oneByteValue = rb.ReadByte();
                         Console.WriteLine(oneByteID + "th IO element's value = " + oneByteValue);
                         _currentByte += 1;
 
@@ -109,8 +109,7 @@ namespace Codec8
                         Console.WriteLine(twoByteID + "th IO element's value = " + twoByteValue);
                         _currentByte += 2;
 
-
-
+                        iotElement.twoBytes.Add(twoByteID, twoByteValue);
                     }
 
                     int fourBytesElements = rb.ReadByte();
@@ -130,6 +129,7 @@ namespace Codec8
                         Console.WriteLine(fourBytesID + "th IO element's value = " + fourBytesValue);
                         _currentByte += 4;
 
+                        iotElement.fourBytes.Add(fourBytesID, fourBytesValue);
                     }
 
                     int eightBytesElements = rb.ReadByte();
@@ -145,16 +145,11 @@ namespace Codec8
                         int eightBytesValue = rb.ReadInt32();
                         Console.WriteLine(eightBytesID + "th IO element's value = " + eightBytesValue);
                         _currentByte += 8;
-                    }
 
+                        iotElement.eightBytes.Add(eightBytesID, eightBytesValue);
+                    }
                 }
             }
-
-
-
-
-
-
         }
         public static int getNumberOfData()
         {
@@ -162,9 +157,6 @@ namespace Codec8
             return numberOfData;
         }
     }
-
-
-   
-    }
+}
 
 
