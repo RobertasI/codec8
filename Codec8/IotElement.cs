@@ -9,6 +9,13 @@ namespace Codec8
 {
     class IotElement
     {
-        //Dictionary<string, int> st = new Dictionary<string, int>();
+        public int[] oneByteElementId { get; set; }
+        public int[] oneByteElementValue { get; set; }
+        public int[] twoBytesElementId { get; set; }
+        public int[] twoBytesElementValue { get; set; }
+        public int[] fourBytesElementId { get; set; }
+        public int[] fourBytesElementValue { get; set; }
+        public int[] eightBytesElementId { get; set; }
+        public int[] eightBytesElementValue { get; set; }
     }
 }

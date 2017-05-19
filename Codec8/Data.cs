@@ -9,6 +9,6 @@ namespace Codec8
 {
     class Data
     {
-        ArrayList IotElementsList = new ArrayList();
+        ArrayList GpsElements = new ArrayList();
     }
 }
