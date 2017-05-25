@@ -9,6 +9,6 @@ namespace Codec8
 {
     class Data
     {
-        ArrayList GpsElements = new ArrayList();
+        public List<Data> DataList = new List<Data>();
     }
 }

@@ -66,14 +66,13 @@ namespace Codec8
                     _currentByte += 2;
                     #endregion
 
-                    int ioElement = rb.ReadByte();
-                    Console.WriteLine("IO element ID of  Event generated: " + ioElement);
+                    iotElement.EventID = rb.ReadByte();
+                    Console.WriteLine("IO element ID of  Event generated: " + iotElement.EventID);
                     _currentByte += 1;
                     
 
-
-                    int ioElements = rb.ReadByte();
-                    Console.WriteLine("IO elements in record: " + ioElements);
+                    iotElement.NumberOfElements = rb.ReadByte();
+                    Console.WriteLine("IO elements in record: " + iotElement.NumberOfElements);
                     _currentByte += 1;
 
                     int oneByteElements = rb.ReadByte();
@@ -83,11 +82,11 @@ namespace Codec8
 
                     for (int j = 0; j < oneByteElements; j++)
                     {
-                        int oneByteID = rb.ReadByte();
+                        byte oneByteID = rb.ReadByte();
                         Console.WriteLine("IO element ID = " + oneByteID);
                         _currentByte += 1;
 
-                        int oneByteValue = rb.ReadByte();
+                        byte oneByteValue = rb.ReadByte();
                         Console.WriteLine(oneByteID + "th IO element's value = " + oneByteValue);
                         _currentByte += 1;
 
@@ -100,7 +99,7 @@ namespace Codec8
 
                     for (int j = 0; j < twoBytesElements; j++)
                     {
-                        int twoByteID = rb.ReadByte();
+                        byte twoByteID = rb.ReadByte();
                         Console.WriteLine("IO element ID = " + twoByteID);
                         _currentByte += 1;
 
@@ -121,7 +120,7 @@ namespace Codec8
 
                     for (int j = 0; j < fourBytesElements; j++)
                     {
-                        int fourBytesID = rb.ReadByte();
+                        byte fourBytesID = rb.ReadByte();
                         Console.WriteLine("IO element ID = " + fourBytesID);
                         _currentByte += 1;
 
@@ -138,7 +137,7 @@ namespace Codec8
 
                     for (int j = 0; j < eightBytesElements; j++)
                     {
-                        int eightBytesID = rb.ReadByte();
+                        byte eightBytesID = rb.ReadByte();
                         Console.WriteLine("IO element ID = " + eightBytesID);
                         _currentByte += 1;
 
@@ -148,9 +147,15 @@ namespace Codec8
 
                         iotElement.eightBytes.Add(eightBytesID, eightBytesValue);
                     }
+                    //susikurti klasę duomenų encodinimui
+                    //pasidaryti, kad pridėtų į listą
+
+                    data.DataList.Add(iotElement.NumberOfElements);
                 }
             }
         }
+
+
         public static int getNumberOfData()
         {
             int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), 1, 2), 0);

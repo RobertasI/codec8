@@ -11,17 +11,19 @@ namespace Codec8
     {
         public IotElement()
         {
-            oneByte = new Dictionary<int, int>();
-            twoBytes = new Dictionary<int, int>();
-            fourBytes = new Dictionary<int, int>();
-            eightBytes = new Dictionary<int, long>();
+            oneByte = new Dictionary<byte, byte>();
+            twoBytes = new Dictionary<byte, int>();
+            fourBytes = new Dictionary<byte, int>();
+            eightBytes = new Dictionary<byte, long>();
         }
 
 
 
-        public IDictionary<int, int> oneByte { get; set; }
-        public IDictionary<int, int> twoBytes { get; set; }
-        public IDictionary<int, int> fourBytes { get; set; }
-        public IDictionary<int, long> eightBytes { get; set; }
+        public IDictionary<byte, byte> oneByte { get; set; }
+        public IDictionary<byte, int> twoBytes { get; set; }
+        public IDictionary<byte, int> fourBytes { get; set; }
+        public IDictionary<byte, long> eightBytes { get; set; }
+        public int EventID { get; set; }
+        public int NumberOfElements { get; set; }
     }
 }
