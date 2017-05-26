@@ -25,5 +25,9 @@ namespace Codec8
         public IDictionary<byte, long> eightBytes { get; set; }
         public int EventID { get; set; }
         public int NumberOfElements { get; set; }
+        public byte numberOfOneByteElements { get; set; }
+        public byte numberOfTwoByteElements { get; set; }
+        public byte numberOfFourByteElements { get; set; }
+        public byte numberOfEightByteElements { get; set; }
     }
 }
