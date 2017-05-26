@@ -9,6 +9,11 @@ namespace Codec8
 {
     class Data
     {
-        public List<GpsElement> DataList = new List<GpsElement>();
+        public ArrayList DataList = new ArrayList();
+
+        public static implicit operator ArrayList(Data v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

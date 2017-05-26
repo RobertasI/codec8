@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Codec8
 {
-    class GpsElement
+    class GpsElement 
     {
 
         public int Longitude { get; set; }

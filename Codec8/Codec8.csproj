@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Data.cs" />
     <Compile Include="DataDecoder.cs" />
+    <Compile Include="DataEncoder.cs" />
     <Compile Include="GpsElement.cs" />
     <Compile Include="IotElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

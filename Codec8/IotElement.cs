@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Codec8
 {
-    class IotElement
+    class IotElement 
     {
         public IotElement()
         {

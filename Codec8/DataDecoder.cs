@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 
 namespace Codec8
@@ -7,19 +8,30 @@ namespace Codec8
     {
         public static void Main()
         {
+            byte[] byteArray = StringConverter.StringToByteArray();
+            Decode(byteArray);
+
+            DataEncoder dataencoder = new DataEncoder();
+
+            dataencoder.Encode(Decode(byteArray));
+
+        }
+        
+        public static ArrayList Decode(byte[] byteArray)
+        {
             GpsElement gpsElement = new GpsElement();
             IotElement iotElement = new IotElement();
             Data data = new Data();
 
 
-
-            int numberOfData = getNumberOfData();
+            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 1, 2), 0);
+            data.DataList.Add(numberOfData);
             Console.WriteLine("Number of data: " + numberOfData);
 
 
-            for (int i = 0; i < getNumberOfData(); i++)
+            for (int i = 0; i < numberOfData; i++)
             {
-               using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(StringConverter.StringToByteArray(), 2, StringConverter.StringToByteArray().Length))))
+                using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 2, StringConverter.StringToByteArray().Length))))
                 {
 
                     var timeStamp = rb.ReadInt64();
@@ -28,55 +40,67 @@ namespace Codec8
                     long cdrTimestamp = timeStamp;
                     DateTime result = epochStart.AddMilliseconds(cdrTimestamp);
                     Console.WriteLine("Time: " + result);
-
+                    data.DataList.Add(timeStamp);
 
                     int priority = rb.ReadByte();
                     Console.WriteLine("Priority: " + priority);
+                    data.DataList.Add(priority);
 
                     #region GPSElements
 
                     gpsElement.Longitude = rb.ReadInt32();
                     Console.WriteLine("Longitude: " + gpsElement.Longitude);
+                    data.DataList.Add(gpsElement.Longitude);
 
                     gpsElement.Latitude = rb.ReadInt32();
                     Console.WriteLine("Latitude: " + gpsElement.Latitude);
+                    data.DataList.Add(gpsElement.Latitude);
 
                     gpsElement.Altitude = rb.ReadInt16();
                     Console.WriteLine("Altitude: " + gpsElement.Altitude);
+                    data.DataList.Add(gpsElement.Altitude);
 
                     gpsElement.Angle = rb.ReadInt16();
                     Console.WriteLine("Angle: " + gpsElement.Angle);
+                    data.DataList.Add(gpsElement.Angle);
 
                     gpsElement.Satellites = rb.ReadByte();
                     Console.WriteLine("Satellites: " + gpsElement.Satellites);
+                    data.DataList.Add(gpsElement.Satellites);
 
                     gpsElement.Speed = rb.ReadInt16();
                     Console.WriteLine("Speed: " + gpsElement.Speed);
+                    data.DataList.Add(gpsElement.Speed);
                     #endregion
 
+
                     iotElement.EventID = rb.ReadByte();
-                    Console.WriteLine("IO element ID of  Event generated: " + iotElement.EventID);                   
+                    Console.WriteLine("IO element ID of  Event generated: " + iotElement.EventID);
+                    data.DataList.Add(iotElement.EventID);
 
                     iotElement.NumberOfElements = rb.ReadByte();
                     Console.WriteLine("IO elements in record: " + iotElement.NumberOfElements);
-                    
+                    data.DataList.Add(iotElement.NumberOfElements);
 
                     iotElement.numberOfOneByteElements = rb.ReadByte();
                     Console.WriteLine("One byte elements in record: " + iotElement.numberOfOneByteElements);
-                    
+                    data.DataList.Add(iotElement.numberOfOneByteElements);
 
                     for (int j = 0; j < iotElement.numberOfOneByteElements; j++)
                     {
                         byte oneByteID = rb.ReadByte();
                         Console.WriteLine("IO element ID = " + oneByteID);
+                        data.DataList.Add(oneByteID);
 
                         byte oneByteValue = rb.ReadByte();
                         Console.WriteLine(oneByteID + "th IO element's value = " + oneByteValue);
+                        data.DataList.Add(oneByteValue);
 
                         iotElement.oneByte.Add(oneByteID, oneByteValue);
+
                     }
 
-
+                    // iki cia sudeta i masyva
                     iotElement.numberOfTwoByteElements = rb.ReadByte();
                     Console.WriteLine("Two bytes elements in record: " + iotElement.numberOfTwoByteElements);
 
@@ -123,19 +147,17 @@ namespace Codec8
                     //susikurti klasę duomenų encodinimui
                     //pasidaryti, kad pridėtų į listą
 
-                    //data.DataList.AddRange(gpsElement);
-                    //.WriteLine(data.DataList);
+
+                    foreach(var item in data.DataList)
+                    {
+                        Console.WriteLine(item);
+                    }
                 }
             }
-        }
-        
 
-
-        public static int getNumberOfData()
-        {
-            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(StringConverter.StringToByteArray(), 1, 2), 0);
-            return numberOfData;
+            return data.DataList;
         }
+
     }
 }
 
