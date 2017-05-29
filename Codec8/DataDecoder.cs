@@ -6,16 +6,16 @@ namespace Codec8
 {
     public class DataDecoder
     {
-        public static void Main()
-        {
-            byte[] byteArray = StringConverter.StringToByteArray();
-            Decode(byteArray);
+        //public static void Main()
+        //{
+        //    byte[] byteArray = StringConverter.StringToByteArray();
+        //    Decode(byteArray);
 
-            DataEncoder dataencoder = new DataEncoder();
+        //    DataEncoder dataencoder = new DataEncoder();
 
-            byte[] encoded =  dataencoder.Encode(Decode(byteArray));
-            Console.WriteLine(encoded);
-        }
+        //    byte[] encoded =  dataencoder.Encode(Decode(byteArray));
+        //    Console.WriteLine(encoded);
+        //}
         
         public static ArrayList Decode(byte[] byteArray)
         {
