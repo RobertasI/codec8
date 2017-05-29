@@ -9,12 +9,19 @@ namespace Codec8
 {
     class DataEncoder
     {
-        public string[] Encode(ArrayList datalist)
+        public byte[] Encode(ArrayList datalist)
         {
-            
-            String[] DataArray = (String[])datalist.ToArray(typeof(string));
-            Console.WriteLine(DataArray);
-            return DataArray;
+            var encodedToString = new StringBuilder();
+
+            foreach (var item in datalist )
+            {
+                encodedToString.Append(item.ToString());
+            }
+
+            return Enumerable.Range(0, (encodedToString.ToString()).Length)
+                     .Where(x => x % 2 == 0)
+                     .Select(x => Convert.ToByte((encodedToString.ToString()).Substring(x, 2), 16))
+                     .ToArray(); ;
         }
     }
 }

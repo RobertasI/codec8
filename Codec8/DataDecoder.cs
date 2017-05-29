@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Codec8
 {
-    class DataDecoder
+    public class DataDecoder
     {
         public static void Main()
         {
@@ -13,8 +13,8 @@ namespace Codec8
 
             DataEncoder dataencoder = new DataEncoder();
 
-            dataencoder.Encode(Decode(byteArray));
-
+            byte[] encoded =  dataencoder.Encode(Decode(byteArray));
+            Console.WriteLine(encoded);
         }
         
         public static ArrayList Decode(byte[] byteArray)
@@ -88,64 +88,61 @@ namespace Codec8
 
                     for (int j = 0; j < iotElement.numberOfOneByteElements; j++)
                     {
-                        byte oneByteID = rb.ReadByte();
-                        Console.WriteLine("IO element ID = " + oneByteID);
-                        data.DataList.Add(oneByteID);
+                        iotElement.oneByteID = rb.ReadByte();
+                        Console.WriteLine("IO element ID = " + iotElement.oneByteID);
+                        data.DataList.Add(iotElement.oneByteID);
 
-                        byte oneByteValue = rb.ReadByte();
-                        Console.WriteLine(oneByteID + "th IO element's value = " + oneByteValue);
-                        data.DataList.Add(oneByteValue);
-
-                        iotElement.oneByte.Add(oneByteID, oneByteValue);
+                        iotElement.oneByteValue = rb.ReadByte();
+                        Console.WriteLine(iotElement.oneByteID + "th IO element's value = " + iotElement.oneByteValue);
+                        data.DataList.Add(iotElement.oneByteValue);
 
                     }
 
-                    // iki cia sudeta i masyva
                     iotElement.numberOfTwoByteElements = rb.ReadByte();
                     Console.WriteLine("Two bytes elements in record: " + iotElement.numberOfTwoByteElements);
+                    data.DataList.Add(iotElement.numberOfTwoByteElements);
 
                     for (int j = 0; j < iotElement.numberOfTwoByteElements; j++)
                     {
-                        byte twoByteID = rb.ReadByte();
-                        Console.WriteLine("IO element ID = " + twoByteID);
+                        iotElement.twoBytesID = rb.ReadByte();
+                        Console.WriteLine("IO element ID = " + iotElement.twoBytesID);
+                        data.DataList.Add(iotElement.twoBytesID);
 
-
-                        int twoByteValue = rb.ReadInt16();
-                        Console.WriteLine(twoByteID + "th IO element's value = " + twoByteValue);
-
-                        iotElement.twoBytes.Add(twoByteID, twoByteValue);
+                        iotElement.twoBytesValue = rb.ReadInt16();
+                        Console.WriteLine(iotElement.twoBytesID + "th IO element's value = " + iotElement.twoBytesValue);
+                        data.DataList.Add(iotElement.twoBytesValue);
                     }
 
 
                     iotElement.numberOfFourByteElements = rb.ReadByte();
                     Console.WriteLine("Four bytes elements in record: " + iotElement.numberOfFourByteElements);
+                    data.DataList.Add(iotElement.numberOfFourByteElements);
 
                     for (int j = 0; j < iotElement.numberOfFourByteElements; j++)
                     {
-                        byte fourBytesID = rb.ReadByte();
-                        Console.WriteLine("IO element ID = " + fourBytesID);
+                        iotElement.fourBytesID = rb.ReadByte();
+                        Console.WriteLine("IO element ID = " + iotElement.fourBytesID);
+                        data.DataList.Add(iotElement.fourBytesID);
 
-                        int fourBytesValue = rb.ReadInt32();
-                        Console.WriteLine(fourBytesID + "th IO element's value = " + fourBytesValue);
-
-                        iotElement.fourBytes.Add(fourBytesID, fourBytesValue);
+                        iotElement.fourBytesValue = rb.ReadInt32();
+                        Console.WriteLine(iotElement.fourBytesID + "th IO element's value = " + iotElement.fourBytesValue);
+                        data.DataList.Add(iotElement.fourBytesValue);
                     }
 
                     iotElement.numberOfEightByteElements = rb.ReadByte();
                     Console.WriteLine("Eight bytes elements in record: " + iotElement.numberOfEightByteElements);
+                    data.DataList.Add(iotElement.numberOfEightByteElements);
 
                     for (int j = 0; j < iotElement.numberOfEightByteElements; j++)
                     {
-                        byte eightBytesID = rb.ReadByte();
-                        Console.WriteLine("IO element ID = " + eightBytesID);
+                        iotElement.eightBytesID = rb.ReadByte();
+                        Console.WriteLine("IO element ID = " + iotElement.eightBytesID);
+                        data.DataList.Add(iotElement.eightBytesID);
 
-                        int eightBytesValue = rb.ReadInt32();
-                        Console.WriteLine(eightBytesID + "th IO element's value = " + eightBytesValue);
-
-                        iotElement.eightBytes.Add(eightBytesID, eightBytesValue);
+                        iotElement.eightBytesValue = rb.ReadInt32();
+                        Console.WriteLine(iotElement.eightBytesID + "th IO element's value = " + iotElement.eightBytesValue);
+                        data.DataList.Add(iotElement.eightBytesValue);
                     }
-                    //susikurti klasę duomenų encodinimui
-                    //pasidaryti, kad pridėtų į listą
 
 
                     foreach(var item in data.DataList)
