@@ -17,12 +17,13 @@ namespace FMDataServer
             TcpListener server = new TcpListener(IPAddress.Parse("0.0.0.0"), 66);
             server.Start();
             Console.WriteLine("Started.");
-            while (true)
-            {
-                Client client = new Client(server.AcceptTcpClient());
-                new Thread(new ThreadStart(client.DoSomethingWithClient)).Start();
-            }
-            server.Stop();
+            
+            
+            Client client = new Client(server.AcceptTcpClient());
+            Thread thread =  new Thread(() => client.DoSomethingWithClient());
+            thread.Start();
+            
+            //server.Stop();
         }
     }
 }

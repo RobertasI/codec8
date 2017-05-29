@@ -21,23 +21,31 @@ namespace FMDataServer
 
         public void DoSomethingWithClient()
         {
-            StreamWriter streamwriter = new StreamWriter(ClientStream);
-            StreamReader streamreader = new StreamReader(streamwriter.BaseStream);
-            streamwriter.WriteLine("Hi. This is x2 TCP/IP easy-to-use server");
-            streamwriter.Flush();
-            string data;
-            try
-            {
-                while ((data = streamreader.ReadLine()) != "exit")
-                {
-                    streamwriter.WriteLine(data);
-                    streamwriter.Flush();
-                }
-            }
-            finally
-            {
-                streamwriter.Close();
-            }
+            //StreamWriter streamwriter = new StreamWriter(ClientStream);
+            //StreamReader streamreader = new StreamReader(streamwriter.BaseStream);
+            //Console.WriteLine("Hi. This is x2 TCP/IP easy-to-use server");
+            ////streamwriter.Flush();
+            //string data = "darta";
+            //try
+            //{
+            //    while ((data = Console.ReadLine()) != "exit")
+            //    {
+            //        Console.WriteLine(data);
+            //       // streamwriter.Flush();
+            //    }
+            //}
+            //finally
+            //{
+            //    streamwriter.Close();
+            //}
+
+            Console.WriteLine("aa");
+
+             
+        }
+        public byte[] sendImei()
+        {
+            return 
         }
     }
 }
