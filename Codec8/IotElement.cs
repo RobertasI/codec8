@@ -24,6 +24,6 @@ namespace Codec8
         public int oneByteValue { get; set; }
         public int twoBytesValue { get; set; }
         public int fourBytesValue { get; set; }
-        public int eightBytesValue { get; set; }
+        public long eightBytesValue { get; set; }
     }
 }
