@@ -39,8 +39,14 @@ namespace Client
                 AVLPacket avlpacket = new AVLPacket();
                 nwStream.Write(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
 
-                //avlpacket.dataLenght;
+                
+                //sending dataarray
+                nwStream.Write(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
 
+
+                //sending crc
+                CrcCalculator crccalculator = new CrcCalculator();
+                nwStream.Write(crccalculator.ComputeChecksumBytes(avlpacket.dataArray), 0, 2);
 
 
             }
