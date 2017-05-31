@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using Codec8;
+using System.IO;
 
 namespace Server
 {
@@ -28,10 +26,10 @@ namespace Server
 
                 using (NetworkStream nwStream = client.GetStream())
                 {
-                    //recieving stream data
-                    byte[] buffer = new byte[client.ReceiveBufferSize];
-                    var bytesCount = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
-                    long dataReceived = BitConverter.ToInt64(buffer, 0);
+                    //recieving IMEI
+                    byte[] imeiBuffer = new byte[15];
+                    var bytesCount = nwStream.Read(imeiBuffer, 0, imeiBuffer.Length);
+                    long dataReceived = BitConverter.ToInt64(imeiBuffer, 0);
                     Console.WriteLine(bytesCount);
                     Console.WriteLine("IMEI Received: " + dataReceived);
 
@@ -41,18 +39,27 @@ namespace Server
                     nwStream.Write(acception, 0, 1);
 
                     //fourzerobytes
-                    int fourBytesRecieved = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
+                    byte[] zeroBytesBuffer = new byte[4];
+                    int fourBytesRecieved = nwStream.Read(zeroBytesBuffer, 0, zeroBytesBuffer.Length);
                     Console.WriteLine(fourBytesRecieved);
 
-                    //getting data array
+                    //getting data array lenght
+                    byte[] dataArrayLenghtBuffer = new byte[4];
+                    ReversedBinaryReader reversedbinaryreader = new ReversedBinaryReader(new MemoryStream(dataArrayLenghtBuffer));
+                    int dataArrayLenght = reversedbinaryreader.ReadInt16();
+                    Console.WriteLine("Data lenght:" + dataArrayLenght);
 
-                    int dataarray = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
+                    //getting data array
+                    byte[] AvlDataArrayBuffer = new byte[dataArrayLenght];
+                    int dataarray = nwStream.Read(AvlDataArrayBuffer, 0, AvlDataArrayBuffer.Length);
                     Console.WriteLine(dataarray);
 
                     //getting crc
-                    int crc = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
-                    var crcRecieved = BitConverter.ToInt16(buffer, 0);
+                    byte[] crcBuffer = new byte[2];
+                    int crc = nwStream.Read(crcBuffer, 0, crcBuffer.Length);
+                    var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
                     Console.WriteLine(crcRecieved);
+
 
 
                     //var avlDataCrcBuffer = new byte[2];

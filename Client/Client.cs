@@ -39,7 +39,9 @@ namespace Client
                 AVLPacket avlpacket = new AVLPacket();
                 nwStream.Write(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
 
-                
+                //sending datalenght
+
+                nwStream.Write(BitConverter.GetBytes(avlpacket.dataArrayLenght),0, 4);
                 //sending dataarray
                 nwStream.Write(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
 

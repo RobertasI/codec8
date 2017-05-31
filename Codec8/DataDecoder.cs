@@ -6,8 +6,8 @@ namespace Codec8
 {
     public class DataDecoder
     {
-        //public static void Main()
-        //{
+        public static void Main()
+        {
         //    byte[] byteArray = StringConverter.StringToByteArray();
         //    Decode(byteArray);
 
@@ -15,7 +15,7 @@ namespace Codec8
 
         //    byte[] encoded =  dataencoder.Encode(Decode(byteArray));
         //    Console.WriteLine(encoded);
-        //}
+        }
         
         public static ArrayList Decode(byte[] byteArray)
         {
