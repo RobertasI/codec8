@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using Codec8;
-using System.IO;
 
 namespace Server
 {
@@ -41,24 +39,26 @@ namespace Server
                     //fourzerobytes
                     byte[] zeroBytesBuffer = new byte[4];
                     int fourBytesRecieved = nwStream.Read(zeroBytesBuffer, 0, zeroBytesBuffer.Length);
-                    Console.WriteLine(fourBytesRecieved);
+                    Console.WriteLine("zero bytes: " + fourBytesRecieved);
 
                     //getting data array lenght
-                    byte[] dataArrayLenghtBuffer = new byte[4];
-                    ReversedBinaryReader reversedbinaryreader = new ReversedBinaryReader(new MemoryStream(dataArrayLenghtBuffer));
-                    int dataArrayLenght = reversedbinaryreader.ReadInt16();
-                    Console.WriteLine("Data lenght:" + dataArrayLenght);
+                    byte[] AvlDataArrayLenghtBuffer = new byte[4];
+                    //ReversedBinaryReader reversedbinaryreader = new ReversedBinaryReader(new MemoryStream(dataArrayLenghtBuffer));
+                    //int dataArrayLenght = reversedbinaryreader.ReadInt16();
+                    int dataArrayLenght = nwStream.Read(AvlDataArrayLenghtBuffer, 0, AvlDataArrayLenghtBuffer.Length);
+                    int iDataArray = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0);
+                    Console.WriteLine("Data lenght as int: " + iDataArray);
 
                     //getting data array
-                    byte[] AvlDataArrayBuffer = new byte[dataArrayLenght];
+                    byte[] AvlDataArrayBuffer = new byte[11];
                     int dataarray = nwStream.Read(AvlDataArrayBuffer, 0, AvlDataArrayBuffer.Length);
-                    Console.WriteLine(dataarray);
+                    Console.WriteLine("data array: " + dataarray);
 
                     //getting crc
-                    byte[] crcBuffer = new byte[2];
+                    byte[] crcBuffer = new byte[5];
                     int crc = nwStream.Read(crcBuffer, 0, crcBuffer.Length);
                     var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
-                    Console.WriteLine(crcRecieved);
+                    Console.WriteLine("CRC:" + crcRecieved);
 
 
 

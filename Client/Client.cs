@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using Codec8;
+using System.IO;
+
 
 namespace Client
 {
@@ -37,20 +36,44 @@ namespace Client
                 Console.WriteLine("You are accepted");
 
                 AVLPacket avlpacket = new AVLPacket();
+
+                //sending zero bytes
                 nwStream.Write(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
+                int iZeroBytes = BitConverter.ToInt32(avlpacket.fourZeroBytes, 0);
+                string sFourzeros = System.Text.Encoding.UTF8.GetString(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
+                Console.WriteLine("Sending zero bytes as integer: " + iZeroBytes);
 
                 //sending datalenght
-
                 nwStream.Write(BitConverter.GetBytes(avlpacket.dataArrayLenght),0, 4);
+                Console.WriteLine("Sending data lenght: " + avlpacket.dataArrayLenght);
+
                 //sending dataarray
                 nwStream.Write(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
-
+                string sDataArray = System.Text.Encoding.UTF8.GetString(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
+                string stringDataArray = avlpacket.dataArray.ToString();
+                ReversedBinaryReader reversedbinaryreader = new ReversedBinaryReader(new MemoryStream(avlpacket.dataArray));
+                long longDataArray = reversedbinaryreader.ReadInt64();
+                int iDataArray = BitConverter.ToInt32(avlpacket.dataArray, 0);
+                Console.WriteLine("Sending data array encoded: " + sDataArray);
+                Console.WriteLine("Sending data array tostring: " + stringDataArray);
+                Console.WriteLine("Sending data array as int:" + iDataArray);
+                Console.WriteLine("Sending data array as long:" + longDataArray);
+                    
 
                 //sending crc
-                CrcCalculator crccalculator = new CrcCalculator();
-                nwStream.Write(crccalculator.ComputeChecksumBytes(avlpacket.dataArray), 0, 2);
+                try {
+                    CrcCalculator crccalculator = new CrcCalculator();
+                    int crc = crccalculator.ComputeChecksum(avlpacket.dataArray);
+                    nwStream.Write(crccalculator.ComputeChecksumBytes(avlpacket.dataArray), 0, 2);
+                    Console.WriteLine("Sending CRC: " + crc);
+                }
+                catch
+                {
+                    
 
-
+                    Console.WriteLine("dafuq ");
+                }
+                
             }
             else { Console.WriteLine("You are not accepted"); }
 
