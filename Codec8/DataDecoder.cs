@@ -17,7 +17,7 @@ namespace Codec8
         //    Console.WriteLine(encoded);
         }
         
-        public static ArrayList Decode(byte[] byteArray)
+        public ArrayList Decode(byte[] byteArray)
         {
             GpsElement gpsElement = new GpsElement();
             IotElement iotElement = new IotElement();
@@ -145,10 +145,10 @@ namespace Codec8
                     }
 
 
-                    foreach(var item in data.DataList)
-                    {
-                        Console.WriteLine(item);
-                    }
+                    //foreach(var item in data.DataList)
+                    //{
+                    //    Console.WriteLine(item);
+                    //}
                 }
             }
 

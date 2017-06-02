@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Client
 {
-    class CrcCalculator
+    public class CrcCalculator
     {
         const ushort polynomial = 0xA001;
         ushort[] table = new ushort[256];

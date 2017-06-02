@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Codec8;
+using System;
+using System.Collections;
 using System.Net;
 using System.Net.Sockets;
+using Client;
+using System.IO;
 
 namespace Server
 {
@@ -25,7 +29,7 @@ namespace Server
                 using (NetworkStream nwStream = client.GetStream())
                 {
                     //recieving IMEI
-                    byte[] imeiBuffer = new byte[15];
+                    byte[] imeiBuffer = new byte[8];
                     var bytesCount = nwStream.Read(imeiBuffer, 0, imeiBuffer.Length);
                     long dataReceived = BitConverter.ToInt64(imeiBuffer, 0);
                     Console.WriteLine(bytesCount);
@@ -43,31 +47,34 @@ namespace Server
 
                     //getting data array lenght
                     byte[] AvlDataArrayLenghtBuffer = new byte[4];
-                    //ReversedBinaryReader reversedbinaryreader = new ReversedBinaryReader(new MemoryStream(dataArrayLenghtBuffer));
-                    //int dataArrayLenght = reversedbinaryreader.ReadInt16();
                     int dataArrayLenght = nwStream.Read(AvlDataArrayLenghtBuffer, 0, AvlDataArrayLenghtBuffer.Length);
                     int iDataArray = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0);
                     Console.WriteLine("Data lenght as int: " + iDataArray);
 
-                    //getting data array
-                    byte[] AvlDataArrayBuffer = new byte[11];
-                    int dataarray = nwStream.Read(AvlDataArrayBuffer, 0, AvlDataArrayBuffer.Length);
-                    Console.WriteLine("data array: " + dataarray);
-
                     //getting crc
-                    byte[] crcBuffer = new byte[5];
+
+                    byte[] crcBuffer = new byte[2];
                     int crc = nwStream.Read(crcBuffer, 0, crcBuffer.Length);
                     var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
-                    Console.WriteLine("CRC:" + crcRecieved);
+                    Console.WriteLine("CRC recieved:" + crcRecieved);
+
+                    //calculating  crc
+                    CrcCalculator crccalculator = new CrcCalculator();
+                    var crcCalculated = crccalculator.ComputeChecksum(AvlDataArrayLenghtBuffer);
+                    Console.WriteLine("CRC calculated:" + crcCalculated);
 
 
+                    //getting data array
+                    byte[] AvlDataArrayBuffer = new byte[iDataArray];
+                    int dataarray = nwStream.Read(AvlDataArrayBuffer, 0, iDataArray);
+                    DataDecoder datadecoder = new DataDecoder();
+                    ArrayList decodedDataArray = datadecoder.Decode(AvlDataArrayBuffer);
+                    foreach (var item in decodedDataArray)
+                    {
+                        Console.WriteLine(item);
+                    }
 
-                    //var avlDataCrcBuffer = new byte[2];
-                    //var avlDataCrcBytesTotal = await networkStream.ReadAsync(avlDataCrcBuffer, 0, avlDataCrcBuffer.Length);
-                    //rbr = new ReverseBinaryReader(new MemoryStream(avlDataCrcBuffer));
-                    //var crcReceived = rbr.ReadUInt16();
-
-
+          
 
                 }
             }
