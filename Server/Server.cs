@@ -58,10 +58,7 @@ namespace Server
                     var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
                     Console.WriteLine("CRC recieved:" + crcRecieved);
 
-                    //calculating  crc
-                    CrcCalculator crccalculator = new CrcCalculator();
-                    var crcCalculated = crccalculator.ComputeChecksum(AvlDataArrayLenghtBuffer);
-                    Console.WriteLine("CRC calculated:" + crcCalculated);
+                    
 
 
                     //getting data array
@@ -74,7 +71,10 @@ namespace Server
                         Console.WriteLine(item);
                     }
 
-          
+                    //calculating  crc
+                    CrcCalculator crccalculator = new CrcCalculator();
+                    var crcCalculated = crccalculator.ComputeChecksum(AvlDataArrayBuffer);
+                    Console.WriteLine("CRC calculated:" + crcCalculated);
 
                 }
             }
