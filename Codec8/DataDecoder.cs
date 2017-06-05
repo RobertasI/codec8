@@ -8,13 +8,18 @@ namespace Codec8
     {
         public static void Main()
         {
-        //    byte[] byteArray = StringConverter.StringToByteArray();
-        //    Decode(byteArray);
+            //byte[] byteArray = StringConverter.StringToByteArray();
+            //DataDecoder dd = new DataDecoder();
+            //var cbb = dd.Decode(byteArray);
+            //foreach (var item in cbb)
+            //{
+            //    Console.WriteLine(item);
+            //}
 
-        //    DataEncoder dataencoder = new DataEncoder();
+            //    DataEncoder dataencoder = new DataEncoder();
 
-        //    byte[] encoded =  dataencoder.Encode(Decode(byteArray));
-        //    Console.WriteLine(encoded);
+            //    byte[] encoded =  dataencoder.Encode(Decode(byteArray));
+            //    Console.WriteLine(encoded);
         }
         
         public ArrayList Decode(byte[] byteArray)

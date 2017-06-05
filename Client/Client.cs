@@ -2,14 +2,19 @@
 using System.Net.Sockets;
 using Codec8;
 using System.IO;
-
+using NLog;
 
 namespace Client
 {
     class Client
     {
+
+        private static readonly Logger ConsoleLogger = LogManager.GetLogger("consoleLogger");
+
         const int PORT_NO = 5000;
         const string SERVER_IP = "127.0.0.1";
+
+
 
         static void Main(string[] args)
         {
@@ -23,9 +28,10 @@ namespace Client
             TcpClient client = new TcpClient(SERVER_IP, PORT_NO);
             NetworkStream nwStream = client.GetStream();
 
-            Console.WriteLine("Sending IMEI : " + Imei);
+            //Console.WriteLine("Sending IMEI : " + Imei);
+            ConsoleLogger.Info("Sending IMEI : " + Imei);
             nwStream.Write(ImeiAsBytes, 0, ImeiAsBytes.Length);
-            Console.WriteLine("Imei lenght: " + ImeiAsBytes.Length);
+            ConsoleLogger.Info("Imei lenght: " + ImeiAsBytes.Length);
 
 
             byte[] bytesToRead = new byte[client.ReceiveBufferSize];
@@ -34,7 +40,7 @@ namespace Client
 
             if (answerToImei == 1)
             {
-                Console.WriteLine("You are accepted");
+                ConsoleLogger.Info("You are accepted");
 
                 AVLPacket avlpacket = new AVLPacket();
 
@@ -42,36 +48,28 @@ namespace Client
                 nwStream.Write(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
                 int iZeroBytes = BitConverter.ToInt32(avlpacket.fourZeroBytes, 0);
                 string sFourzeros = System.Text.Encoding.UTF8.GetString(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
-                Console.WriteLine("Sending zero bytes as integer: " + iZeroBytes);
-                Console.WriteLine("zero bytes lenght: " + avlpacket.fourZeroBytes.Length);
+                ConsoleLogger.Info("Sending zero bytes as integer: " + iZeroBytes);
+                ConsoleLogger.Info("Zero bytes lenght: " + avlpacket.fourZeroBytes.Length);
 
 
                 //sending datalenght
                 avlpacket.dataArrayLenght = avlpacket.dataArray.Length;
                 nwStream.Write(BitConverter.GetBytes(avlpacket.dataArrayLenght),0, 4);
-                Console.WriteLine("Sending data lenght: " + avlpacket.dataArray.Length);
-                Console.WriteLine("Sending ");
+                ConsoleLogger.Info("Sending data lenght: " + avlpacket.dataArray.Length);
 
                 // first sending crc, because otherwise doesnt work
                 //sending crc
-                try
-                {
-                    CrcCalculator crccalculator = new CrcCalculator();
-                    int crc = crccalculator.ComputeChecksum(avlpacket.dataArray);
-                    nwStream.Write(crccalculator.ComputeChecksumBytes(avlpacket.dataArray), 0, 2);
-                    Console.WriteLine("Sending CRC: " + crc);
-                }
-                catch(IOException e)
-                {
-                    
-                    Console.WriteLine("dafuq: " + e);
-                }
+                CrcCalculator crccalculator = new CrcCalculator();
+                int crc = crccalculator.ComputeChecksum(avlpacket.dataArray);
+                nwStream.Write(crccalculator.ComputeChecksumBytes(avlpacket.dataArray), 0, 2);
+                ConsoleLogger.Info("Sending CRC: " + crc);
+           
 
                 //sending dataarray
                 nwStream.Write(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
       
             }
-            else { Console.WriteLine("You are not accepted"); }
+            else { ConsoleLogger.Info("You are not accepted"); }
 
         }
     }
