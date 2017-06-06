@@ -1,12 +1,8 @@
 ﻿using Codec8;
 using System;
-using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using Client;
-using System.IO;
-using Server.DataAccess;
-using Server.Domain;
 using NLog;
 using System.Threading.Tasks;
 
@@ -19,11 +15,12 @@ namespace Server
         const int PORT_NO = 5000;
         const string SERVER_IP = "127.0.0.1";
 
+
         public static void Main(string[] args)
         {
 
             Server server = new Server();
-            server.StartServer().Wait();
+            server.StartServer();
 
         }
 
@@ -45,54 +42,48 @@ namespace Server
         }
 
         public async Task handleClients(TcpClient client)  
-        { 
-
+        {
                  
                 using (NetworkStream nwStream = client.GetStream())
                 {
-                    ServerDataService serverdataservice = new ServerDataService();
-                    ServerData serverData = new ServerData();
 
                     //recieving IMEI
                     byte[] imeiBuffer = new byte[8];
-                    var bytesCount = nwStream.Read(imeiBuffer, 0, imeiBuffer.Length);
-                    serverData.Imei = BitConverter.ToInt64(imeiBuffer, 0);
-                    ConsoleLogger.Info("IMEI Received: " + serverData.Imei);
+                    var bytesCount = nwStream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
+                    var Imei = BitConverter.ToInt64(imeiBuffer, 0);
+                    ConsoleLogger.Info("IMEI Received: " + Imei);
 
                     //writing to client answer
                     ConsoleLogger.Info("Sending back answer 01 ");
                     byte[] acception = BitConverter.GetBytes(1);
-                    nwStream.Write(acception, 0, 1);
+                    await nwStream.WriteAsync(acception, 0, 1);
 
                     //fourzerobytes
                     byte[] zeroBytesBuffer = new byte[4];
-                    int fourBytesRecieved = nwStream.Read(zeroBytesBuffer, 0, zeroBytesBuffer.Length);
+                    int fourBytesRecieved = await nwStream.ReadAsync(zeroBytesBuffer, 0, zeroBytesBuffer.Length);
                     ConsoleLogger.Info("zero bytes: " + fourBytesRecieved);
 
                     //getting data array lenght
                     byte[] AvlDataArrayLenghtBuffer = new byte[4];
-                    int dataArrayLenght = nwStream.Read(AvlDataArrayLenghtBuffer, 0, AvlDataArrayLenghtBuffer.Length);
+                    int dataArrayLenght = await nwStream.ReadAsync(AvlDataArrayLenghtBuffer, 0, AvlDataArrayLenghtBuffer.Length);
                     int iDataArray = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0);
-                    serverData.AvlHeader = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0); //will need to change this 
-                    ConsoleLogger.Info("Data lenght as int: " + serverData.AvlHeader);
-
+                    var AvlHeader = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0); //will need to change this 
+                    ConsoleLogger.Info("Data lenght as int: " + AvlHeader);
 
                     //getting crc
 
                     byte[] crcBuffer = new byte[2];
-                    int crc = nwStream.Read(crcBuffer, 0, crcBuffer.Length);
+                    int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
                     var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
                     ConsoleLogger.Info("CRC recieved:" + crcRecieved);
 
 
-
-
                     //getting data array
                     byte[] AvlDataArrayBuffer = new byte[iDataArray];
-                    int dataarray = nwStream.Read(AvlDataArrayBuffer, 0, iDataArray);
+                    int dataarray = await nwStream.ReadAsync(AvlDataArrayBuffer, 0, iDataArray);
                     DataDecoder datadecoder = new DataDecoder();
-                    serverData.AvlData = datadecoder.Decode(AvlDataArrayBuffer);
-                    foreach (var item in serverData.AvlData)
+                    var AvlData = datadecoder.Decode(AvlDataArrayBuffer);
+                    foreach (var item in AvlData)
                     {
                         ConsoleLogger.Info(item);
                     }
@@ -104,6 +95,5 @@ namespace Server
 
                 }
         }
-
     }
 }
