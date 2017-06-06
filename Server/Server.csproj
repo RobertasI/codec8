@@ -67,14 +67,6 @@
       <Project>{1455d93d-8625-4fce-9f56-1244353893d9}</Project>
       <Name>Codec8</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Server.DataAccess\Server.DataAccess.csproj">
-      <Project>{D707B06C-2A26-4964-8638-D739A094FD4E}</Project>
-      <Name>Server.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Server.Domain\Server.Domain.csproj">
-      <Project>{27793811-079A-4F5A-8B81-D7CA8269DD3E}</Project>
-      <Name>Server.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
