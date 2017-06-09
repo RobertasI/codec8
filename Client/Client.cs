@@ -16,7 +16,7 @@ namespace Client
 
         static void Main(string[] args)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Client client = new Client();
                 Task task = new Task(client.StartClient);

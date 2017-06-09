@@ -16,7 +16,7 @@ namespace Server
         private  Logger ConsoleLogger = LogManager.GetLogger("consoleLogger");
         const int PORT_NO = 5000;
         const string SERVER_IP = "127.0.0.1";
-
+        private int clientsCounter;
 
         public static void Main(string[] args)
         {
@@ -37,8 +37,8 @@ namespace Server
 
             while (true)
             {
-                TcpClient client = await listener.AcceptTcpClientAsync();
-                await handleClients(client);
+                TcpClient client = listener.AcceptTcpClient();
+                handleClients(client);
             }
 
         }
@@ -59,7 +59,8 @@ namespace Server
                     serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                     Console.WriteLine("IMEI Received: " + serverLog.Imei);
                     ConsoleLogger.Info("IMEI Received: " + serverLog.Imei);
-
+                    clientsCounter++;
+                    Console.WriteLine("Clients online: " + clientsCounter);
 
                     //writing to client answer
                     ConsoleLogger.Info("Sending back answer 01 ");
@@ -108,7 +109,10 @@ namespace Server
                     if (crcRecieved == crcCalculated)
                     {
                         //add data to serverlog
+                        clientsCounter--;
+                        Console.WriteLine("Clients online: " + clientsCounter);
                         serverLogDataServie.Add(serverLog);
+                        
                     }
                     else
                     {
