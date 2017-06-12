@@ -27,18 +27,15 @@ namespace Codec8
             GpsElement gpsElement = new GpsElement();
             IotElement iotElement = new IotElement();
             Data data = new Data();
-
-
+            
             int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 1, 2), 0);
             data.DataList.Add(numberOfData);
             //Console.WriteLine("Number of data: " + numberOfData);
-
-
+            
             for (int i = 0; i < numberOfData; i++)
             {
                 using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 2, StringConverter.StringToByteArray().Length))))
                 {
-
                     var timeStamp = rb.ReadInt64();
 
                     DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);

@@ -1,12 +1,12 @@
 ﻿using Server.Domain;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 
 
 namespace Server.DataAccess
 {
-    public class ServerLogDataService : IDisposable
+    public class ServerLogDataService
     {
         public List<ServerLog> GetAll()
         {
@@ -20,14 +20,9 @@ namespace Server.DataAccess
         {
             using (var context = new ServerLogContext())
             {
-                context.ServerLog.Add(serverlog);
+                context.ServerLog.AddOrUpdate(serverlog);
                 context.SaveChanges();
             }
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }
