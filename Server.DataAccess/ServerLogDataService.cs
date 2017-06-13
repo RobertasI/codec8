@@ -20,6 +20,7 @@ namespace Server.DataAccess
         {
             using (var context = new ServerLogContext())
             {
+                if (context.ServerLog.Any((o => (o.Imei == serverlog.Imei) && (o.Latitude == serverlog.Latitude) && (o.Longitude == serverlog.Longitude)))) return; //cheking if data exist. if yes, return
                 context.ServerLog.AddOrUpdate(serverlog);
                 context.SaveChanges();
             }

@@ -49,7 +49,7 @@ namespace Codec8
                     data.DataList.Add(priority);
 
                     #region GPSElements
-
+                    
                     gpsElement.Longitude = rb.ReadInt32();
                     //Console.WriteLine("Longitude: " + gpsElement.Longitude);
                     data.DataList.Add(gpsElement.Longitude);
