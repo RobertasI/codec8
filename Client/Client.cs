@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
@@ -7,8 +8,8 @@ namespace Client
     public class Client
     {
 
-        const int PORT_NO = 5000;
-        const string SERVER_IP = "127.0.0.1";
+        private int PORT_NO = Convert.ToInt32(ConfigurationManager.AppSettings["port"]);
+        private string SERVER_IP = ConfigurationManager.AppSettings["ip"];
 
         static void Main(string[] args)
         {

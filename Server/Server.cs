@@ -7,14 +7,16 @@ namespace Server
 {
     class Server
     {
-        int PORT_NO = Convert.ToInt32(ConfigurationManager.AppSettings["port"]);
-        string SERVER_IP = ConfigurationManager.AppSettings["ip"]; 
+        private int PORT_NO = Convert.ToInt32(ConfigurationManager.AppSettings["port"]);
+        private string SERVER_IP = ConfigurationManager.AppSettings["ip"]; 
 
 
         public static void Main(string[] args)
         {
             Server server = new Server();
             server.StartServer();
+            ClientHandler clientHandler = new ClientHandler();
+            clientHandler.checkPerformanceExistance();
             Console.ReadLine();
         }
 

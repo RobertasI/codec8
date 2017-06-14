@@ -3,6 +3,7 @@ using Codec8;
 using Server.DataAccess;
 using Server.Domain;
 using System;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
@@ -10,19 +11,22 @@ namespace Server
 {
     class ClientHandler
     {
-        public int clientsCounter;
 
+        
+        static string categoryName = "Clients";
+        static string counterName = "Clients online";
+        PerformanceCounter clientsCounter = new PerformanceCounter(categoryName, counterName);
 
         public async void acceptClients(TcpListener listener)
         {
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
-                handleClients(client);
+                handleClientData(client);
             }
         }
 
-        public async Task handleClients(TcpClient client)
+        public async Task handleClientData(TcpClient client)
         {
             //int clientsCounter;
             ServerLog serverLog = new ServerLog();
@@ -36,11 +40,11 @@ namespace Server
                 var bytesCount = nwStream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                 Console.WriteLine("IMEI Received: " + serverLog.Imei);
-                clientsCounter++;
+                clientsCounter.Increment();
                 Console.WriteLine("Clients online: " + clientsCounter);
                 
                 //writing answer to client
-                Console.WriteLine("Sending back answer 01 ");
+                Console.WriteLine("Sending back answer 01");
                 byte[] acception = BitConverter.GetBytes(1);
                 await nwStream.WriteAsync(acception, 0, 1);
 
@@ -92,7 +96,7 @@ namespace Server
                     Console.WriteLine("crc matches");
 
                     serverLogDataService.Add(serverLog);
-                    clientsCounter--;
+                    clientsCounter.Decrement();
                     Console.WriteLine("Clients online: " + clientsCounter);
                 }
 
@@ -105,5 +109,18 @@ namespace Server
             }
         }
 
+        public void checkPerformanceExistance()
+        {
+            if (!PerformanceCounterCategory.Exists(categoryName))
+            {
+                string firstCounterName = "Clients online";
+                string firstCounterHelp = "Clients online live update";
+                string categoryHelp = "Clients related real time statistics";
+
+                PerformanceCounterCategory customCategory = new PerformanceCounterCategory(categoryName);
+                PerformanceCounterCategory.Create(categoryName, categoryHelp, PerformanceCounterCategoryType.SingleInstance, firstCounterName, firstCounterHelp);
+            }
+
+        }
     }
 }
