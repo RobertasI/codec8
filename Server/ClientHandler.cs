@@ -16,7 +16,7 @@ namespace Server
         static string categoryName = "Clients";
         static string counterName = "Clients online";
         PerformanceCounter clientsCounter = new PerformanceCounter(categoryName, counterName);
-
+       
         public async void acceptClients(TcpListener listener)
         {
             while (true)
@@ -29,6 +29,7 @@ namespace Server
         public async Task handleClientData(TcpClient client)
         {
             //int clientsCounter;
+            clientsCounter.ReadOnly = false;
             ServerLog serverLog = new ServerLog();
 
             ServerLogDataService serverLogDataService = new ServerLogDataService();
@@ -40,13 +41,15 @@ namespace Server
                 var bytesCount = nwStream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                 Console.WriteLine("IMEI Received: " + serverLog.Imei);
-                clientsCounter.Increment();
-                Console.WriteLine("Clients online: " + clientsCounter);
+                
                 
                 //writing answer to client
                 Console.WriteLine("Sending back answer 01");
                 byte[] acception = BitConverter.GetBytes(1);
                 await nwStream.WriteAsync(acception, 0, 1);
+                clientsCounter.Increment();
+                //clientsCounter.ToString();
+                Console.WriteLine("Clients online: " + clientsCounter.ToString());
 
                 //fourzerobytes
                 byte[] zeroBytesBuffer = new byte[4];
@@ -107,20 +110,6 @@ namespace Server
 
                 }
             }
-        }
-
-        public void checkPerformanceExistance()
-        {
-            if (!PerformanceCounterCategory.Exists(categoryName))
-            {
-                string firstCounterName = "Clients online";
-                string firstCounterHelp = "Clients online live update";
-                string categoryHelp = "Clients related real time statistics";
-
-                PerformanceCounterCategory customCategory = new PerformanceCounterCategory(categoryName);
-                PerformanceCounterCategory.Create(categoryName, categoryHelp, PerformanceCounterCategoryType.SingleInstance, firstCounterName, firstCounterHelp);
-            }
-
         }
     }
 }

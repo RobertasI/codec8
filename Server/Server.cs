@@ -2,22 +2,34 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace Server
 {
     class Server
     {
+        private static string categoryName = "Clients";
         private int PORT_NO = Convert.ToInt32(ConfigurationManager.AppSettings["port"]);
-        private string SERVER_IP = ConfigurationManager.AppSettings["ip"]; 
-
+        private string SERVER_IP = ConfigurationManager.AppSettings["ip"];
 
         public static void Main(string[] args)
         {
             Server server = new Server();
-            server.StartServer();
-            ClientHandler clientHandler = new ClientHandler();
-            clientHandler.checkPerformanceExistance();
-            Console.ReadLine();
+            if (PerformanceCounterCategory.Exists(categoryName))
+            {
+                server.StartServer();
+                Console.ReadLine();
+            }
+            else
+            {
+                string firstCounterName = "Clients online";
+                string firstCounterHelp = "Clients online live update";
+                string categoryHelp = "Clients related real time statistics";
+                PerformanceCounterCategory clientsCounter = new PerformanceCounterCategory(categoryName);
+                PerformanceCounterCategory.Create(categoryName, categoryHelp, PerformanceCounterCategoryType.SingleInstance, firstCounterName, firstCounterHelp);
+                server.StartServer();
+                Console.ReadLine();
+            }
         }
 
         public void StartServer()
@@ -29,6 +41,6 @@ namespace Server
             Console.WriteLine("Listening... ");
             ClientHandler clientHandler = new ClientHandler();
             clientHandler.acceptClients(listener);
-        }       
+        }
     }
 }
