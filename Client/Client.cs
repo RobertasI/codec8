@@ -31,7 +31,6 @@ namespace Client
             NetworkStream nwStream = client.GetStream();
 
             //---data to send to the server---
-            //string textToSend = DateTime.Now.ToString();
             long Imei = 123456789012345;
             byte[] ImeiAsBytes = BitConverter.GetBytes(Imei);
 
@@ -50,18 +49,15 @@ namespace Client
 
                 //sending zero bytes
                 await nwStream.WriteAsync(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
-                int iZeroBytes = BitConverter.ToInt32(avlpacket.fourZeroBytes, 0);
                 string sFourzeros = System.Text.Encoding.UTF8.GetString(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
-                Console.WriteLine("Sending zero bytes as integer: " + iZeroBytes);
-                Console.WriteLine("Zero bytes lenght: " + avlpacket.fourZeroBytes.Length);
+                Console.WriteLine("Sending number of zero bytes: " + avlpacket.fourZeroBytes.Length);
 
                 //sending datalenght
                 avlpacket.dataArrayLenght = avlpacket.dataArray.Length;
                 await nwStream.WriteAsync(BitConverter.GetBytes(avlpacket.dataArrayLenght), 0, 4);
                 Console.WriteLine("Sending data lenght: " + avlpacket.dataArray.Length);
 
-                // first sending crc, because otherwise doesnt work
-                //sending crc
+                //sending crc first, because otherwise it doesnt work
                 CrcCalculator crccalculator = new CrcCalculator();
                 int crc = crccalculator.ComputeChecksum(avlpacket.dataArray);
                 await nwStream.WriteAsync(crccalculator.ComputeChecksumBytes(avlpacket.dataArray), 0, 2);

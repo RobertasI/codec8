@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Codec8
 {
@@ -12,9 +8,7 @@ namespace Codec8
 
         public ReversedBinaryReader(Stream stream)  : base(stream)
         {
-
         }
-
 
         public override int ReadInt32()
         {

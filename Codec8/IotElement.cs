@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Codec8
 {
     class IotElement 
     {
-
-
         public int EventID { get; set; }
         public int NumberOfElements { get; set; }
         public byte numberOfOneByteElements { get; set; }
