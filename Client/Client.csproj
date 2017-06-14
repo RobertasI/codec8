@@ -47,7 +47,6 @@
     <Compile Include="Client.cs" />
     <Compile Include="CrcCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomDataGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
