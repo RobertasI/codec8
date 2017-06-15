@@ -10,7 +10,7 @@ using log4net;
 
 namespace Server
 {
-    class ClientHandler
+    class ClientHandler : IDisposable
     {
         
         static string categoryName = "Clients";
@@ -105,10 +105,15 @@ namespace Server
                 else
                 {
                     // resend data
-
-
+                    Client.Client clientObject = new Client.Client();
+                    clientObject.SendData(client);
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            clientsCounter.Dispose();
         }
     }
 }
