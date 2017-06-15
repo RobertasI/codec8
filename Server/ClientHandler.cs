@@ -6,16 +6,17 @@ using System;
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using log4net;
 
 namespace Server
 {
     class ClientHandler
     {
-
         
         static string categoryName = "Clients";
         static string counterName = "Clients online";
         PerformanceCounter clientsCounter = new PerformanceCounter(categoryName, counterName);
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
        
         public async void acceptClients(TcpListener listener)
         {
@@ -40,33 +41,29 @@ namespace Server
                 byte[] imeiBuffer = new byte[8];
                 var bytesCount = nwStream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
-                Console.WriteLine("IMEI Received: " + serverLog.Imei);
+                Logger.Info("IMEI Received: " + serverLog.Imei);
                 
-                
-                //writing answer to client
-                Console.WriteLine("Sending back answer 01");
+                //writing answer to client, always 1 to send
                 byte[] acception = BitConverter.GetBytes(1);
                 await nwStream.WriteAsync(acception, 0, 1);
-                clientsCounter.Increment();
-                //clientsCounter.ToString();
-                Console.WriteLine("Clients online: " + clientsCounter.ToString());
 
-                //fourzerobytes
+                //add accepted client and print it in console and file
+                clientsCounter.Increment();
+                Logger.Info("Clients online: " + clientsCounter.NextValue().ToString());
+
+                //reading zero bytes
                 byte[] zeroBytesBuffer = new byte[4];
                 int fourBytesRecieved = await nwStream.ReadAsync(zeroBytesBuffer, 0, zeroBytesBuffer.Length);
-                Console.WriteLine("Zero bytes: " + fourBytesRecieved);
 
                 //getting data array lenght
                 byte[] AvlDataArrayLenghtBuffer = new byte[4];
                 int dataArrayLenght = await nwStream.ReadAsync(AvlDataArrayLenghtBuffer, 0, AvlDataArrayLenghtBuffer.Length);
                 int iDataArrayLenght = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0);
-                Console.WriteLine("Data lenght as int: " + dataArrayLenght);
 
                 //getting crc
                 byte[] crcBuffer = new byte[2];
                 int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
                 var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
-                Console.WriteLine("CRC recieved:" + crcRecieved);
 
                 //getting data array
                 byte[] AvlDataArrayBuffer = new byte[iDataArrayLenght];
@@ -83,14 +80,11 @@ namespace Server
 
                     serverLog.Longitude = (int)AvlData[3];
                     serverLog.Latitude = (int)AvlData[4];
-
-                    Console.WriteLine(AvlData[i]);
                 }
 
                 //calculating  crc
                 CrcCalculator crccalculator = new CrcCalculator();
                 var crcCalculated = crccalculator.ComputeChecksum(AvlDataArrayBuffer);
-                Console.WriteLine("CRC calculated:" + crcCalculated);
 
 
                 if (crcRecieved == crcCalculated)
@@ -98,9 +92,14 @@ namespace Server
                     //add data to serverlog 
                     Console.WriteLine("crc matches");
 
+                    //write needed data to console and file 
+                    Logger.Info("Imei: " + serverLog.Imei + "---" + " Date: " + serverLog.Date + "---" + " Longitude: " + serverLog.Longitude 
+                        + "---" + " Latitude: " + serverLog.Latitude);
+                    //add data to database
                     serverLogDataService.Add(serverLog);
+                    
                     clientsCounter.Decrement();
-                    Console.WriteLine("Clients online: " + clientsCounter);
+                    Logger.Info("Clients online: " + clientsCounter.NextValue().ToString());
                 }
 
                 else
