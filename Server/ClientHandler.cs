@@ -29,7 +29,6 @@ namespace Server
 
         public async Task handleClientData(TcpClient client)
         {
-            //int clientsCounter;
             clientsCounter.ReadOnly = false;
             ServerLog serverLog = new ServerLog();
 
