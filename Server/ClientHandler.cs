@@ -23,7 +23,7 @@ namespace Server
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
-                handleClientData(client);
+                 handleClientData(client);
             }
         }
 

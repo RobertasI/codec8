@@ -21,7 +21,7 @@ namespace Codec8
             
             for (int i = 0; i < numberOfData; i++)
             {
-                using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 2, StringConverter.StringToByteArray().Length))))
+                using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 2, byteArray.Length))))
                 {
                     var timeStamp = rb.ReadInt64();
 
