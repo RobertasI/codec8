@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Codec8
 {
-    class DataEncoder
+    public class DataEncoder
     {
         public byte[] Encode(ArrayList datalist)
         {
