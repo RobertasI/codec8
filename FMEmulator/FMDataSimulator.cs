@@ -31,7 +31,7 @@ namespace FMEmulator
         ArrayList data = new ArrayList();
 
 
-        public byte[] GenerateAVLData()
+        public ArrayList GenerateAVLData()
         {
 
             
@@ -111,8 +111,11 @@ namespace FMEmulator
             }
 
             DataEncoder dataencoder = new DataEncoder();
+            DataDecoder dd = new DataDecoder();
             var byteArray = dataencoder.Encode(data);
-            return byteArray;            
+            //dd.Decode(byteArray);
+            var listt = dd.Decode(byteArray);
+            return listt;
         }
     }
 }

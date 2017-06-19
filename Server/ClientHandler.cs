@@ -104,6 +104,7 @@ namespace Server
                 else
                 {
                     // resend data
+                    Console.WriteLine("crc doesnt match");
                     Client.Client clientObject = new Client.Client();
                     clientObject.SendData(client);
                 }

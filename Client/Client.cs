@@ -14,7 +14,7 @@ namespace Client
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         static void Main(string[] args)
         {
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 7; i++)
             {
                 Client client = new Client();
                 Task task = new Task(client.StartClient);

@@ -62,6 +62,10 @@
       <Project>{1455d93d-8625-4fce-9f56-1244353893d9}</Project>
       <Name>Codec8</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FMEmulator\FMEmulator.csproj">
+      <Project>{5559b43f-a4bb-46c7-b364-1e1bcee717c6}</Project>
+      <Name>FMEmulator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

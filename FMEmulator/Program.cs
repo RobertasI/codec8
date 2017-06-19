@@ -10,14 +10,14 @@ namespace FMEmulator
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("emulating started...");
-            //FMDataSimulator fm = new FMDataSimulator();
-            //var list = fm.GenerateAVLData();
-            //foreach(var item in list)
-            //{
-            //    Console.WriteLine(item);
-            //}
-            //Console.ReadLine();
+            Console.WriteLine("emulating started...");
+            FMDataSimulator fm = new FMDataSimulator();
+            var list = fm.GenerateAVLData();
+            foreach (var item in list)
+            {
+                Console.WriteLine(item);
+            }
+            Console.ReadLine();
         }
     }
 }
