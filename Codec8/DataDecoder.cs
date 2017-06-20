@@ -28,7 +28,7 @@ namespace Codec8
                     DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
                     long cdrTimestamp = timeStamp;
                     DateTime result = epochStart.AddMilliseconds(cdrTimestamp);
-                    data.DataList.Add(timeStamp);
+                    data.DataList.Add(result);
 
                     int priority = rb.ReadByte();
                     data.DataList.Add(priority);

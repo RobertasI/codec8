@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Codec8;
+
 
 namespace FMEmulator
 {
@@ -12,7 +10,9 @@ namespace FMEmulator
         {
             Console.WriteLine("emulating started...");
             FMDataSimulator fm = new FMDataSimulator();
-            var list = fm.GenerateAVLData();
+
+            //var list = fm.GenerateAVLData();
+            var list = StringConverter.StringToByteArray();
             foreach (var item in list)
             {
                 Console.WriteLine(item);

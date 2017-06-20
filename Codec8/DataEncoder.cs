@@ -11,15 +11,28 @@ namespace Codec8
         {
             var encodedToString = new StringBuilder();
 
-            foreach (var item in datalist )
+            foreach (var item in datalist)
             {
                 encodedToString.Append(item.ToString());
             }
 
-            return Enumerable.Range(0, (encodedToString.ToString()).Length)
-                     .Where(x => x % 2 == 0)
-                     .Select(x => Convert.ToByte((encodedToString.ToString()).Substring(x, 2), 16))
-                     .ToArray(); ;
+            var stringer = encodedToString.ToString();
+            Console.WriteLine(stringer);
+
+            var lenght = stringer.Length;
+
+            byte[] toBytes = Encoding.ASCII.GetBytes(stringer);
+            return toBytes;
+
+            //return Enumerable.Range(0, stringer.Length)
+            //         .Where(x => x % 2 == 0)
+            //         .Select(x => Convert.ToByte(stringer.Substring(x, 2),16))
+            //         .ToArray(); ;
+
+            //return Enumerable.Range(0, hex.Length)
+            //                 .Where(x => x % 2 == 0)
+            //                 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+            //                 .ToArray();
         }
     }
 }
