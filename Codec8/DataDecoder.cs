@@ -16,13 +16,15 @@ namespace Codec8
             IotElement iotElement = new IotElement();
             Data data = new Data();
             
-            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 1, 2), 0);
+            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 0, 2), 0);
             data.DataList.Add(numberOfData);
             
             for (int i = 0; i < numberOfData; i++)
             {
                 using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 2, byteArray.Length))))
                 {
+
+
                     var timeStamp = rb.ReadInt64();
 
                     DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
@@ -34,7 +36,7 @@ namespace Codec8
                     data.DataList.Add(priority);
 
                     #region GPSElements
-                    
+
                     gpsElement.Longitude = rb.ReadInt32();
                     data.DataList.Add(gpsElement.Longitude);
 
@@ -76,7 +78,7 @@ namespace Codec8
                     iotElement.numberOfTwoByteElements = rb.ReadByte();
                     data.DataList.Add(iotElement.numberOfTwoByteElements);
 
-                    for (int j = 0; j < iotElement.numberOfTwoByteElements; j++)
+                    for (int m = 0; m < iotElement.numberOfTwoByteElements; m++)
                     {
                         iotElement.twoBytesID = rb.ReadByte();
                         data.DataList.Add(iotElement.twoBytesID);
@@ -88,7 +90,7 @@ namespace Codec8
                     iotElement.numberOfFourByteElements = rb.ReadByte();
                     data.DataList.Add(iotElement.numberOfFourByteElements);
 
-                    for (int j = 0; j < iotElement.numberOfFourByteElements; j++)
+                    for (int n = 0; n < iotElement.numberOfFourByteElements; n++)
                     {
                         iotElement.fourBytesID = rb.ReadByte();
                         data.DataList.Add(iotElement.fourBytesID);
@@ -100,7 +102,7 @@ namespace Codec8
                     iotElement.numberOfEightByteElements = rb.ReadByte();
                     data.DataList.Add(iotElement.numberOfEightByteElements);
 
-                    for (int j = 0; j < iotElement.numberOfEightByteElements; j++)
+                    for (int o = 0; o < iotElement.numberOfEightByteElements; o++)
                     {
                         iotElement.eightBytesID = rb.ReadByte();
                         data.DataList.Add(iotElement.eightBytesID);
@@ -112,6 +114,18 @@ namespace Codec8
                 }
             }
             return data.DataList;
+        }
+
+        public DateTime GetDate(byte[] milliseconds)
+        {
+            //ReversedBinaryReader rbr = new ReversedBinaryReader();
+            var timeStamp = BitConverter.ToInt64(milliseconds, 1);
+
+            DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
+            long cdrTimestamp = timeStamp;
+            DateTime result = epochStart.AddMilliseconds(cdrTimestamp);
+
+            return result;
         }
     }
 }

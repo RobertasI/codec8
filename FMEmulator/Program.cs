@@ -10,9 +10,10 @@ namespace FMEmulator
         {
             Console.WriteLine("emulating started...");
             FMDataSimulator fm = new FMDataSimulator();
+            DataDecoder dd = new DataDecoder();
 
-            //var list = fm.GenerateAVLData();
-            var list = StringConverter.StringToByteArray();
+            var listbytes = fm.GenerateAVLDataBytes();
+            var list = dd.Decode(listbytes);
             foreach (var item in list)
             {
                 Console.WriteLine(item);

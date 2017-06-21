@@ -19,15 +19,15 @@ namespace Codec8
             var stringer = encodedToString.ToString();
             Console.WriteLine(stringer);
 
-            var lenght = stringer.Length;
+            //var lenght = stringer.Length;
 
-            byte[] toBytes = Encoding.ASCII.GetBytes(stringer);
-            return toBytes;
+            //byte[] toBytes = Encoding.ASCII.GetBytes(stringer);
+            //return toBytes;
 
-            //return Enumerable.Range(0, stringer.Length)
-            //         .Where(x => x % 2 == 0)
-            //         .Select(x => Convert.ToByte(stringer.Substring(x, 2),16))
-            //         .ToArray(); ;
+            return Enumerable.Range(0, stringer.Length)
+                     .Where(x => x % 2 == 0)
+                     .Select(x => Convert.ToByte(stringer.Substring(x, 2), 16))
+                     .ToArray(); ;
 
             //return Enumerable.Range(0, hex.Length)
             //                 .Where(x => x % 2 == 0)
