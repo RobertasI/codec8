@@ -8,6 +8,13 @@ namespace Codec8
     {
         public static void Main()
         {
+            //DataDecoder dd = new DataDecoder();
+            //var list = dd.Decode(StringConverter.StringToByteArray());
+            //foreach (var item in list)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            //Console.ReadLine();
         }
         
         public ArrayList Decode(byte[] byteArray)
@@ -16,7 +23,7 @@ namespace Codec8
             IotElement iotElement = new IotElement();
             Data data = new Data();
             
-            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 0, 2), 0);
+            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 1, 2), 0);
             data.DataList.Add(numberOfData);
             
             for (int i = 0; i < numberOfData; i++)

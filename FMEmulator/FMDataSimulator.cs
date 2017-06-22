@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using Codec8;
+using System.Collections.Generic;
+
 namespace FMEmulator
 {
     public class FMDataSimulator
@@ -136,87 +138,107 @@ namespace FMEmulator
 
         public byte[] GenerateAVLDataBytes()
         {
+
+            //List<byte> data = new List<byte>();
             ArrayList data = new ArrayList();
+            int numberOfData = random.Next(1, 6);
+            data.Add(Convert.ToByte(numberOfData));
 
-            byte numberOfData = Convert.ToByte(random.Next(1, 6));
-            data.Add(numberOfData);
-
-            var timeStamp = BitConverter.GetBytes(GenerateRandomDateTimeInMiliseconds());
-            foreach (var item in timeStamp)
+            for (int i = 0; i < numberOfData; i++)
             {
-                data.Add(item);
+
+                var timeStamp = BitConverter.GetBytes(GenerateRandomDateTimeInMiliseconds());
+
+                AddBytesToArray(timeStamp, data);
+
+                //foreach (var item in timeStamp)
+                //{
+                //    data.Add(item);
+                //}
+
+                byte priority = Convert.ToByte(random.Next(1, 2));
+
+                #region GPSElements
+                var longitude = BitConverter.GetBytes(random.Next(0, 181));
+                AddBytesToArray(longitude, data);
+                var latitude = BitConverter.GetBytes(random.Next(0, 91));
+                AddBytesToArray(latitude, data);
+                var altitude = BitConverter.GetBytes((short)random.Next(0, 150));
+                AddBytesToArray(altitude, data);
+                var angle = BitConverter.GetBytes((short)random.Next(1, 100));
+                AddBytesToArray(angle,data);
+                byte sattelites = Convert.ToByte(random.Next(1, 15));
+                data.Add(sattelites);
+                var speed = BitConverter.GetBytes((short)random.Next(0, 150));
+                AddBytesToArray(speed, data);
+
+
+
+
+                ////data.Add(timeStamp);
+                //data.Add(priority);
+                //data.Add(longitude);
+                //data.Add(latitude);
+                //data.Add(altitude);
+                //data.Add(angle);
+                //data.Add(sattelites);
+                //data.Add(speed);
+                #endregion
+
+                #region IOElements
+                int numberOfIOElementsInRecord = random.Next(1, 11);
+                data.Add(Convert.ToByte(numberOfIOElementsInRecord));
+
+                int NumberOfOneByteElements = random.Next(1, numberOfIOElementsInRecord);
+                data.Add(Convert.ToByte(NumberOfOneByteElements));
+
+                for (int j = 0; j < numberOfIOElementsInRecord; j++)
+                {
+                    int oneByteId = random.Next(1, 100);
+                    data.Add(Convert.ToByte(oneByteId));
+                    int oneByteValue = random.Next(1, 100);
+                    data.Add(Convert.ToByte(oneByteValue));
+                }
+
+                int numberOfTwobyteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements);
+                data.Add(Convert.ToByte(numberOfTwobyteElements));
+
+                for (int j = 0; j < numberOfTwobyteElements; j++)
+                {
+                    int twoBytesId = random.Next(1, 100);
+                    data.Add(Convert.ToByte(twoBytesId));
+                    int twoBytesValue = random.Next(1, 100);
+                    data.Add(Convert.ToByte(twoBytesValue));
+                }
+
+                int numberOfFourByteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements);
+                data.Add(Convert.ToByte(numberOfFourByteElements));
+                for (int j = 0; j < numberOfFourByteElements; j++)
+                {
+                    int fourBytesId = random.Next(1, 100);
+                    data.Add(Convert.ToByte(fourBytesId));
+                    int fourBytesValue = random.Next(1, 100);
+                    data.Add(Convert.ToByte(fourBytesValue));
+                }
+
+                int numberOfEightbyteElements = numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements - numberOfFourByteElements;
+                data.Add(Convert.ToByte(numberOfEightbyteElements));
+                for (int j = 0; j < numberOfEightbyteElements; j++)
+                {
+                    int eightBytesId = random.Next(1, 100);
+                    data.Add(Convert.ToByte(eightBytesId));
+                    int eightBytesValue = random.Next(1, 100);
+                    data.Add(Convert.ToByte(eightBytesValue));
+                }
+                #endregion
+
             }
-            
+            //foreach (var item in data)
+            //{
+            //    byte[] dataArray = item.ToArray();
+            //}
 
-            byte priority = Convert.ToByte(random.Next(1, 2));
-            data.Add(priority);
-
-            #region GPSElements
-            byte longitude = Convert.ToByte(random.Next(0, 181));
-            byte latitude = Convert.ToByte(random.Next(0, 91));
-            byte altitude = Convert.ToByte(random.Next(0, 150));
-            byte angle = Convert.ToByte(random.Next(1, 100));
-            byte sattelites = Convert.ToByte(random.Next(1, 15));
-            byte speed = Convert.ToByte(random.Next(0, 150));
-
-            data.Add(timeStamp);
-            data.Add(priority);
-            data.Add(longitude);
-            data.Add(latitude);
-            data.Add(altitude);
-            data.Add(angle);
-            data.Add(sattelites);
-            data.Add(speed);
-            #endregion
-
-            #region IOElements
-            int numberOfIOElementsInRecord = random.Next(1, 11);
-            data.Add(Convert.ToByte(numberOfIOElementsInRecord));
-
-            int NumberOfOneByteElements = random.Next(1, numberOfIOElementsInRecord);
-            data.Add(Convert.ToByte(NumberOfOneByteElements));
-
-            for (int j = 0; j < numberOfIOElementsInRecord; j++)
-            {
-                int oneByteId = random.Next(1, 100);
-                data.Add(Convert.ToByte(oneByteId));
-                int oneByteValue = random.Next(1, 100);
-                data.Add(Convert.ToByte(oneByteValue));
-            }
-
-            int numberOfTwobyteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements);
-            data.Add(Convert.ToByte(numberOfTwobyteElements));
-
-            for (int j = 0; j < numberOfTwobyteElements; j++)
-            {
-                int twoBytesId = random.Next(1, 100);
-                data.Add(Convert.ToByte(twoBytesId));
-                int twoBytesValue = random.Next(1, 100);
-                data.Add(Convert.ToByte(twoBytesValue));
-            }
-
-            int numberOfFourByteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements);
-            data.Add(Convert.ToByte(numberOfFourByteElements));
-            for (int j = 0; j < numberOfFourByteElements; j++)
-            {
-                int fourBytesId = random.Next(1, 100);
-                data.Add(Convert.ToByte(fourBytesId));
-                int fourBytesValue = random.Next(1, 100);
-                data.Add(Convert.ToByte(fourBytesValue));
-            }
-
-            int numberOfEightbyteElements = numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements - numberOfFourByteElements;
-            data.Add(Convert.ToByte(numberOfEightbyteElements));
-            for (int j = 0; j < numberOfEightbyteElements; j++)
-            {
-                int eightBytesId = random.Next(1, 100);
-                data.Add(Convert.ToByte(eightBytesId));
-                int eightBytesValue = random.Next(1, 100);
-                data.Add(Convert.ToByte(eightBytesValue));
-            }
-            #endregion
-
-            byte[] dataArray = data.ToArray(typeof(byte)) as byte[];
+            byte[] dataArray = (byte[])data.ToArray(typeof(byte));
             return dataArray;
         }
 
@@ -225,10 +247,20 @@ namespace FMEmulator
         {
 
             DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
-            int daysToAdd = random.Next(10000, 20000);
+            int daysToAdd = random.Next(1000, 2000);
             var randomDate = epochStart.AddDays(daysToAdd);
             var randomDateInMiliseconds = ((randomDate - epochStart).TotalMilliseconds);
             return randomDateInMiliseconds;
+        }
+
+        public void AddBytesToArray(byte[] arr, ArrayList data)
+        {
+            Array.Reverse(arr);
+            foreach (var item in arr)
+            {
+                data.Add(item);
+            }
+
         }
     }
 }
