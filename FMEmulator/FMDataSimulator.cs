@@ -2,6 +2,7 @@
 using System.Collections;
 using Codec8;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FMEmulator
 {
@@ -139,50 +140,33 @@ namespace FMEmulator
         public byte[] GenerateAVLDataBytes()
         {
 
-            //List<byte> data = new List<byte>();
-            ArrayList data = new ArrayList();
+            List<byte> data = new List<byte>();
             int numberOfData = random.Next(1, 6);
-            data.Add(Convert.ToByte(numberOfData));
+            data.AddRange(BitConverter.GetBytes(numberOfData));
 
             for (int i = 0; i < numberOfData; i++)
             {
-
-                var timeStamp = BitConverter.GetBytes(GenerateRandomDateTimeInMiliseconds());
-
-                AddBytesToArray(timeStamp, data);
-
-                //foreach (var item in timeStamp)
-                //{
-                //    data.Add(item);
-                //}
+                var timeStamp = (DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                Console.WriteLine("time: " + timeStamp);
+                data.AddRange(BitConverter.GetBytes(timeStamp));
 
                 byte priority = Convert.ToByte(random.Next(1, 2));
+                data.Add(priority);
 
                 #region GPSElements
-                var longitude = BitConverter.GetBytes(random.Next(0, 181));
-                AddBytesToArray(longitude, data);
-                var latitude = BitConverter.GetBytes(random.Next(0, 91));
-                AddBytesToArray(latitude, data);
-                var altitude = BitConverter.GetBytes((short)random.Next(0, 150));
-                AddBytesToArray(altitude, data);
-                var angle = BitConverter.GetBytes((short)random.Next(1, 100));
-                AddBytesToArray(angle,data);
+                var longitude = BitConverter.GetBytes(random.Next(25000000, 30000000));
+                data.AddRange(longitude);
+                var latitude = BitConverter.GetBytes(random.Next(50000000, 600000000));
+                data.AddRange(latitude);
+                var altitude = BitConverter.GetBytes(Convert.ToInt16(random.Next(0, 32767)));
+                data.AddRange(altitude);
+                var angle = BitConverter.GetBytes(Convert.ToInt16(random.Next(0, 32767)));
+                data.AddRange(angle);
                 byte sattelites = Convert.ToByte(random.Next(1, 15));
                 data.Add(sattelites);
-                var speed = BitConverter.GetBytes((short)random.Next(0, 150));
-                AddBytesToArray(speed, data);
+                var speed = BitConverter.GetBytes(Convert.ToInt16(random.Next(0, 32767)));
+                data.AddRange(speed);
 
-
-
-
-                ////data.Add(timeStamp);
-                //data.Add(priority);
-                //data.Add(longitude);
-                //data.Add(latitude);
-                //data.Add(altitude);
-                //data.Add(angle);
-                //data.Add(sattelites);
-                //data.Add(speed);
                 #endregion
 
                 #region IOElements
@@ -238,7 +222,12 @@ namespace FMEmulator
             //    byte[] dataArray = item.ToArray();
             //}
 
-            byte[] dataArray = (byte[])data.ToArray(typeof(byte));
+            byte[] dataArray = data.ToArray();
+
+            foreach (var item in dataArray)
+            {
+                Console.WriteLine(item);
+            }
             return dataArray;
         }
 
@@ -251,16 +240,6 @@ namespace FMEmulator
             var randomDate = epochStart.AddDays(daysToAdd);
             var randomDateInMiliseconds = ((randomDate - epochStart).TotalMilliseconds);
             return randomDateInMiliseconds;
-        }
-
-        public void AddBytesToArray(byte[] arr, ArrayList data)
-        {
-            Array.Reverse(arr);
-            foreach (var item in arr)
-            {
-                data.Add(item);
-            }
-
         }
     }
 }

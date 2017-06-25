@@ -16,20 +16,23 @@ namespace Codec8
             //}
             //Console.ReadLine();
         }
-        
+         
         public ArrayList Decode(byte[] byteArray)
         {
             GpsElement gpsElement = new GpsElement();
             IotElement iotElement = new IotElement();
             Data data = new Data();
             
-            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 1, 2), 0);
-            data.DataList.Add(numberOfData);
-            
-            for (int i = 0; i < numberOfData; i++)
+            //int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 0, 2), 0);
+            //data.DataList.Add(numberOfData);
+            using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 0, byteArray.Length))))
             {
-                using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 2, byteArray.Length))))
-                {
+                int numberOfData = rb.ReadInt16();
+                data.DataList.Add(numberOfData);
+
+                for (int i = 0; i < numberOfData; i++)
+            {
+                
 
 
                     var timeStamp = rb.ReadInt64();
