@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 
 namespace Codec8
 {
@@ -22,24 +23,32 @@ namespace Codec8
             GpsElement gpsElement = new GpsElement();
             IotElement iotElement = new IotElement();
             Data data = new Data();
-            
-            //int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 0, 2), 0);
-            //data.DataList.Add(numberOfData);
-            using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 0, byteArray.Length))))
+
+
+            Console.WriteLine("-------------");
+            foreach (var item in byteArray)
             {
-                int numberOfData = rb.ReadInt16();
-                data.DataList.Add(numberOfData);
+                Console.WriteLine(item);
+            }
+
+            
+            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 0, 2), 0);
+            data.DataList.Add(numberOfData);
+
+            using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 1, byteArray.Length))))
+            {
+                //int numberOfData = rb.ReadInt16();
+                //data.DataList.Add(numberOfData);
 
                 for (int i = 0; i < numberOfData; i++)
             {
-                
+
 
 
                     var timeStamp = rb.ReadInt64();
 
                     DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
-                    long cdrTimestamp = timeStamp;
-                    DateTime result = epochStart.AddMilliseconds(cdrTimestamp);
+                    DateTime result = epochStart.AddMilliseconds(timeStamp);
                     data.DataList.Add(result);
 
                     int priority = rb.ReadByte();
@@ -87,7 +96,7 @@ namespace Codec8
 
                     iotElement.numberOfTwoByteElements = rb.ReadByte();
                     data.DataList.Add(iotElement.numberOfTwoByteElements);
-
+                    Console.WriteLine("Number of 2 bytes elements recieved: " + iotElement.numberOfTwoByteElements);
                     for (int m = 0; m < iotElement.numberOfTwoByteElements; m++)
                     {
                         iotElement.twoBytesID = rb.ReadByte();

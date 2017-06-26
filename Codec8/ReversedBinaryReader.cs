@@ -31,5 +31,12 @@ namespace Codec8
             Array.Reverse(a64);
             return BitConverter.ToInt64(a64, 0);
         }
+
+        public override double ReadDouble()
+        {
+            byte[] d8 = base.ReadBytes(8);
+            Array.Reverse(d8);
+            return BitConverter.ToDouble(d8, 0);
+        }
     }
 }

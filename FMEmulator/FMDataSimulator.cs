@@ -8,134 +8,137 @@ namespace FMEmulator
 {
     public class FMDataSimulator
     {
-        //private int numberOfData;
-        //private string timeStamp;
-        //private string priority;
-        //private string longitude;
-        //private string latitude;
-        //private string altitude;
-        //private string angle;
-        //private string sattelites;
-        //private string speed;
-        //private string ioEvent;
-        //private int numberOfIOElementsInRecord;
-        //private int NumberOfOneByteElements;
-        //private string oneByteId;
-        //private string oneByteValue;
-        //private int numberOfTwobyteElements;
-        //private string twoBytesId;
-        //private string twoBytesValue;
-        //private int numberOfFourByteElements;
-        //private string fourBytesId;
-        //private string fourBytesValue;
-        //private int numberOfEightbyteElements;
-        //private string eightBytesId;
-        //private string eightBytesValue;
+        private int numberOfData;
+        private string time;
+        private string priority;
+        private string longitude;
+        private string latitude;
+        private string altitude;
+        private string angle;
+        private string sattelites;
+        private string speed;
+        private string ioEvent;
+        private int numberOfIOElementsInRecord;
+        private int NumberOfOneByteElements;
+        private string oneByteId;
+        private string oneByteValue;
+        private int numberOfTwobyteElements;
+        private string twoBytesId;
+        private string twoBytesValue;
+        private int numberOfFourByteElements;
+        private string fourBytesId;
+        private string fourBytesValue;
+        private int numberOfEightbyteElements;
+        private string eightBytesId;
+        private string eightBytesValue;
         //ArrayList data = new ArrayList();
         Random random = new Random();
 
-        //public ArrayList GenerateAVLData()
-        //{
+        public byte[] GenerateAVLData()
+        {
 
-            
-            
-            //numberOfData = random.Next(1, 6);
-            //var sNumberOfData = numberOfData.ToString("X2");
-            //data.Add(sNumberOfData);
-            //for (int i = 0; i < numberOfData; i++)
-            //{
-            //    DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
-            //    int daysToAdd = random.Next(10000, 20000);
-            //    var epochEnd = epochStart.AddDays(daysToAdd);
-            //    timeStamp = ((int)((epochEnd - epochStart).TotalMilliseconds)).ToString("X16");
-            //    priority = random.Next(0,2).ToString("X2");
+            List<string> data = new List<string>();
 
-            //    longitude = random.Next(0, 181).ToString("X8");
-            //    latitude = random.Next(0, 91).ToString("X8");
-            //    altitude = random.Next(0, 150).ToString("X4");
-            //    angle = random.Next(1, 100).ToString("X4");
-            //    sattelites = random.Next(1, 15).ToString("X2");
-            //    speed = random.Next(0, 150).ToString("X4");
+            numberOfData = random.Next(1, 6);
+            var sNumberOfData = numberOfData.ToString("X2");
+            data.Add(sNumberOfData);
+            for (int i = 0; i < numberOfData; i++)
+            {
 
-            //    ioEvent = random.Next(0, 2).ToString("X2");
-            //    numberOfIOElementsInRecord = random.Next(1, 11);
-            //    var stringNumberOfIOElementsInRecord = numberOfIOElementsInRecord.ToString("X2");
+                time = ((long)((DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds)).ToString("X16");
+                priority = random.Next(0, 2).ToString("X2");
 
-            //    #region Adding to list
-            //    data.Add(timeStamp);
-            //    data.Add(priority);
-            //    data.Add(longitude);
-            //    data.Add(latitude);
-            //    data.Add(altitude);
-            //    data.Add(angle);
-            //    data.Add(sattelites);
-            //    data.Add(speed);
-            //    data.Add(ioEvent);
-            //    data.Add(stringNumberOfIOElementsInRecord);
-            //    #endregion
+                longitude = random.Next(25000000, 30000000).ToString("X8");
+                latitude = random.Next(50000000, 600000000).ToString("X8");
+                altitude = random.Next(0, 32767).ToString("X4");
+                angle = random.Next(0, 32767).ToString("X4");
+                sattelites = random.Next(1, 15).ToString("X2");
+                speed = random.Next(0, 150).ToString("X4");
 
-            //    NumberOfOneByteElements = random.Next(0, numberOfIOElementsInRecord);
-            //    var sNumberOfOneByteElements = NumberOfOneByteElements.ToString("X2");
-            //    data.Add(sNumberOfOneByteElements);
-            //    for (int j = 0; j < numberOfIOElementsInRecord; j++)
-            //    {
-            //        oneByteId = random.Next(1, 100).ToString("X2");
-            //        data.Add(oneByteId);
-            //        oneByteValue = random.Next(1,100).ToString("X2");
-            //        data.Add(oneByteValue);
-            //    }
+                ioEvent = random.Next(0, 2).ToString("X2");
+                numberOfIOElementsInRecord = random.Next(1, 11);
+                var stringNumberOfIOElementsInRecord = numberOfIOElementsInRecord.ToString("X2");
 
-            //    numberOfTwobyteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements);
-            //    var sNumberOfTwobyteElements = numberOfTwobyteElements.ToString("X2");
-            //    data.Add(sNumberOfTwobyteElements);
-            //    for (int j = 0; j < numberOfTwobyteElements; j++)
-            //    {
-            //        twoBytesId = random.Next(1, 100).ToString("X2");
-            //        data.Add(twoBytesId);
-            //        twoBytesValue = random.Next(1, 100).ToString("X4");
-            //        data.Add(twoBytesValue);
-            //    }
+                #region Adding to list
+                data.Add(time);
+                data.Add(priority);
+                data.Add(longitude);
+                data.Add(latitude);
+                data.Add(altitude);
+                data.Add(angle);
+                data.Add(sattelites);
+                data.Add(speed);
+                data.Add(ioEvent);
+                data.Add(stringNumberOfIOElementsInRecord);
+                #endregion
 
-            //    numberOfFourByteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements);
-            //    var sNumberOfFourByteElements = numberOfFourByteElements.ToString("x2");
-            //    data.Add(sNumberOfFourByteElements);
-            //    for (int j = 0; j < numberOfFourByteElements; j++)
-            //    {
-            //        fourBytesId = random.Next(1, 100).ToString("X2");
-            //        data.Add(fourBytesId);
-            //        fourBytesValue = random.Next(1, 100).ToString("X8");
-            //        data.Add(fourBytesValue);
-            //    }
+                NumberOfOneByteElements = random.Next(0, numberOfIOElementsInRecord);
+                var sNumberOfOneByteElements = NumberOfOneByteElements.ToString("X2");
+                data.Add(sNumberOfOneByteElements);
+                for (int j = 0; j < numberOfIOElementsInRecord; j++)
+                {
+                    oneByteId = random.Next(1, 100).ToString("X2");
+                    data.Add(oneByteId);
+                    oneByteValue = random.Next(1, 100).ToString("X2");
+                    data.Add(oneByteValue);
+                }
 
-            //    numberOfEightbyteElements = numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements - numberOfFourByteElements;
-            //    var sNumberOfEightbyteElements = numberOfEightbyteElements.ToString("X2");
-            //    data.Add(sNumberOfEightbyteElements);
-            //    for (int j = 0; j < numberOfEightbyteElements; j++)
-            //    {
-            //        eightBytesId = random.Next(1, 100).ToString("X2");
-            //        data.Add(eightBytesId);
-            //        eightBytesValue = random.Next(1, 100).ToString("X16");
-            //        data.Add(eightBytesValue);
-                //}
-            //}
+                int maxNumberOfTwoBytesElements = numberOfIOElementsInRecord - NumberOfOneByteElements;
 
 
-        //    Console.WriteLine("---------bytes-------");
-        //    foreach (var item in data)
-        //    {
-        //        Console.WriteLine(item);
-        //    }
-        //    Console.WriteLine("---------bytes-------");
+
+                numberOfTwobyteElements = random.Next(0, maxNumberOfTwoBytesElements);
+                var sNumberOfTwobyteElements = numberOfTwobyteElements.ToString("X2");
+                Console.WriteLine("Number of 2 bytes elemenets: " + numberOfTwobyteElements);
+                data.Add(sNumberOfTwobyteElements);
+                for (int m = 0; m < numberOfTwobyteElements; m++)
+                {
+                    twoBytesId = random.Next(1, 100).ToString("X2");
+                    data.Add(twoBytesId);
+                    twoBytesValue = random.Next(1, 100).ToString("X4");
+                    data.Add(twoBytesValue);
+                }
+
+                int maxNumberOfFourBytesElements = numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements;
+
+                numberOfFourByteElements = random.Next(0, maxNumberOfFourBytesElements);
+                var sNumberOfFourByteElements = numberOfFourByteElements.ToString("x2");
+                data.Add(sNumberOfFourByteElements);
+                for (int n = 0; n < numberOfFourByteElements; n++)
+                {
+                    fourBytesId = random.Next(1, 100).ToString("X2");
+                    data.Add(fourBytesId);
+                    fourBytesValue = random.Next(1, 100).ToString("X8");
+                    data.Add(fourBytesValue);
+                }
 
 
-        //    DataEncoder dataencoder = new DataEncoder();
-        //    DataDecoder dd = new DataDecoder();
+                numberOfEightbyteElements = numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements - numberOfFourByteElements;
+                var sNumberOfEightbyteElements = numberOfEightbyteElements.ToString("X2");
+                data.Add(sNumberOfEightbyteElements);
+                for (int o = 0; o < numberOfEightbyteElements; o++)
+                {
+                    eightBytesId = random.Next(1, 100).ToString("X2");
+                    data.Add(eightBytesId);
+                    eightBytesValue = random.Next(1, 100).ToString("X16");
+                    data.Add(eightBytesValue);
+                }
+            }
 
-        //    var byteArray = dataencoder.Encode(data);
-        //    var listt = dd.Decode(byteArray);
 
-        //    return listt;
-        //}
+            DataEncoder dataencoder = new DataEncoder();
+            //DataDecoder dd = new DataDecoder();
+
+            var byteArray = dataencoder.Encode(data);
+            //var listt = dd.Decode(byteArray);
+
+            return byteArray;
+        }
+
+
+
+        // ------------------------------
+
 
         public byte[] GenerateAVLDataBytes()
         {
@@ -146,11 +149,17 @@ namespace FMEmulator
 
             for (int i = 0; i < numberOfData; i++)
             {
-                var timeStamp = (DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-                Console.WriteLine("time: " + timeStamp);
-                data.AddRange(BitConverter.GetBytes(timeStamp));
+                long time = (long)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds;
+                Console.WriteLine("time: " + time);
+                var timeBytes = BitConverter.GetBytes(time);
+                foreach (var item in timeBytes)
+                {
+                    data.Add(item);
+                }
 
-                byte priority = Convert.ToByte(random.Next(1, 2));
+                //data.AddRange(BitConverter.GetBytes(time));
+
+                byte priority = Convert.ToByte(random.Next(0, 1));
                 data.Add(priority);
 
                 #region GPSElements
@@ -184,10 +193,12 @@ namespace FMEmulator
                     data.Add(Convert.ToByte(oneByteValue));
                 }
 
-                int numberOfTwobyteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements);
+
+
+                int numberOfTwobyteElements = random.Next(0, (numberOfIOElementsInRecord - NumberOfOneByteElements));
                 data.Add(Convert.ToByte(numberOfTwobyteElements));
 
-                for (int j = 0; j < numberOfTwobyteElements; j++)
+                for (int m = 0; m < numberOfTwobyteElements; m++)
                 {
                     int twoBytesId = random.Next(1, 100);
                     data.Add(Convert.ToByte(twoBytesId));
@@ -197,7 +208,7 @@ namespace FMEmulator
 
                 int numberOfFourByteElements = random.Next(0, numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements);
                 data.Add(Convert.ToByte(numberOfFourByteElements));
-                for (int j = 0; j < numberOfFourByteElements; j++)
+                for (int n = 0; n < numberOfFourByteElements; n++)
                 {
                     int fourBytesId = random.Next(1, 100);
                     data.Add(Convert.ToByte(fourBytesId));
@@ -207,7 +218,7 @@ namespace FMEmulator
 
                 int numberOfEightbyteElements = numberOfIOElementsInRecord - NumberOfOneByteElements - numberOfTwobyteElements - numberOfFourByteElements;
                 data.Add(Convert.ToByte(numberOfEightbyteElements));
-                for (int j = 0; j < numberOfEightbyteElements; j++)
+                for (int o = 0; o < numberOfEightbyteElements; o++)
                 {
                     int eightBytesId = random.Next(1, 100);
                     data.Add(Convert.ToByte(eightBytesId));
@@ -221,13 +232,15 @@ namespace FMEmulator
             //{
             //    byte[] dataArray = item.ToArray();
             //}
+            DataEncoder de = new DataEncoder();
 
             byte[] dataArray = data.ToArray();
-
+             
             foreach (var item in dataArray)
             {
                 Console.WriteLine(item);
             }
+
             return dataArray;
         }
 
