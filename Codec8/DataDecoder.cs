@@ -85,6 +85,8 @@ namespace Codec8
                     iotElement.numberOfOneByteElements = rb.ReadByte();
                     data.DataList.Add(iotElement.numberOfOneByteElements);
 
+                    Console.WriteLine("Number of 1 bytes elements recieved: " + iotElement.numberOfOneByteElements);
+
                     for (int j = 0; j < iotElement.numberOfOneByteElements; j++)
                     {
                         iotElement.oneByteID = rb.ReadByte();

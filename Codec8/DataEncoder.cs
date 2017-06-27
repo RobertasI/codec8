@@ -21,21 +21,6 @@ namespace Codec8
             var stringData = encodedToString.ToString();
             Console.WriteLine(stringData);
 
-            //var lenght = stringer.Length;
-
-            //byte[] toBytes = Encoding.ASCII.GetBytes(stringer);
-            //return toBytes;
-
-            //return Enumerable.Range(0, stringData.Length)
-            //         .Where(x => x % 2 == 0)
-            //         .Select(x => Convert.ToByte(stringData.Substring(x, 2), 16))
-            //         .ToArray(); ;
-
-            //return Enumerable.Range(0, hex.Length)
-            //                 .Where(x => x % 2 == 0)
-            //                 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-            //                 .ToArray();
-
            
             return Enumerable.Range(0, stringData.Length)
                 .Where(x => x % 2 == 0)
@@ -43,6 +28,6 @@ namespace Codec8
                 .ToArray();
        
 
-    }
+        }
     }
 }

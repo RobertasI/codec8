@@ -47,34 +47,38 @@ namespace FMEmulator
 
                 time = ((long)((DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds)).ToString("X16");
                 priority = random.Next(0, 2).ToString("X2");
+                data.Add(time);
+                data.Add(priority);              
 
+                #region GPSElements
                 longitude = random.Next(25000000, 30000000).ToString("X8");
-                latitude = random.Next(50000000, 600000000).ToString("X8");
+                latitude = random.Next(50000000, 60000000).ToString("X8");
                 altitude = random.Next(0, 32767).ToString("X4");
                 angle = random.Next(0, 32767).ToString("X4");
                 sattelites = random.Next(1, 15).ToString("X2");
                 speed = random.Next(0, 150).ToString("X4");
 
-                ioEvent = random.Next(0, 2).ToString("X2");
-                numberOfIOElementsInRecord = random.Next(1, 11);
-                var stringNumberOfIOElementsInRecord = numberOfIOElementsInRecord.ToString("X2");
-
-                #region Adding to list
-                data.Add(time);
-                data.Add(priority);
                 data.Add(longitude);
                 data.Add(latitude);
                 data.Add(altitude);
                 data.Add(angle);
                 data.Add(sattelites);
                 data.Add(speed);
-                data.Add(ioEvent);
-                data.Add(stringNumberOfIOElementsInRecord);
+                
                 #endregion
+
+                ioEvent = random.Next(0, 2).ToString("X2");
+                data.Add(ioEvent);
+
+                numberOfIOElementsInRecord = random.Next(1, 11);
+                var stringNumberOfIOElementsInRecord = numberOfIOElementsInRecord.ToString("X2");
+                data.Add(stringNumberOfIOElementsInRecord);
 
                 NumberOfOneByteElements = random.Next(0, numberOfIOElementsInRecord);
                 var sNumberOfOneByteElements = NumberOfOneByteElements.ToString("X2");
                 data.Add(sNumberOfOneByteElements);
+
+                Console.WriteLine("Number of 1 bytes elemenets sent: " + NumberOfOneByteElements);
                 for (int j = 0; j < numberOfIOElementsInRecord; j++)
                 {
                     oneByteId = random.Next(1, 100).ToString("X2");
@@ -89,7 +93,7 @@ namespace FMEmulator
 
                 numberOfTwobyteElements = random.Next(0, maxNumberOfTwoBytesElements);
                 var sNumberOfTwobyteElements = numberOfTwobyteElements.ToString("X2");
-                Console.WriteLine("Number of 2 bytes elemenets: " + numberOfTwobyteElements);
+                Console.WriteLine("Number of 2 bytes elemenets sent: " + numberOfTwobyteElements);
                 data.Add(sNumberOfTwobyteElements);
                 for (int m = 0; m < numberOfTwobyteElements; m++)
                 {
@@ -104,6 +108,7 @@ namespace FMEmulator
                 numberOfFourByteElements = random.Next(0, maxNumberOfFourBytesElements);
                 var sNumberOfFourByteElements = numberOfFourByteElements.ToString("x2");
                 data.Add(sNumberOfFourByteElements);
+                Console.WriteLine("Number of 4 bytes elemenets sent: " + numberOfFourByteElements);
                 for (int n = 0; n < numberOfFourByteElements; n++)
                 {
                     fourBytesId = random.Next(1, 100).ToString("X2");
@@ -131,7 +136,6 @@ namespace FMEmulator
 
             var byteArray = dataencoder.Encode(data);
             //var listt = dd.Decode(byteArray);
-
             return byteArray;
         }
 
