@@ -114,18 +114,6 @@ namespace Codec8
             }
             return data.DataList;
         }
-
-        public DateTime GetDate(byte[] milliseconds)
-        {
-            //ReversedBinaryReader rbr = new ReversedBinaryReader();
-            var timeStamp = BitConverter.ToInt64(milliseconds, 1);
-
-            DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
-            long cdrTimestamp = timeStamp;
-            DateTime result = epochStart.AddMilliseconds(cdrTimestamp);
-
-            return result;
-        }
     }
 }
 
