@@ -131,5 +131,7 @@ namespace FMEmulator
             var byteArray = dataencoder.Encode(data);
             return byteArray;
         }      
+
+        
     }
 }

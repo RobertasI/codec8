@@ -17,13 +17,6 @@ namespace Codec8
             IotElement iotElement = new IotElement();
             Data data = new Data();
 
-
-            Console.WriteLine("-------------");
-            foreach (var item in byteArray)
-            {
-                Console.WriteLine(item);
-            }
-
             using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 0, byteArray.Length))))
             {
                 int numberOfData = rb.ReadByte();
@@ -72,7 +65,6 @@ namespace Codec8
                     iotElement.numberOfOneByteElements = rb.ReadByte();
                     data.DataList.Add(iotElement.numberOfOneByteElements);
 
-                    Console.WriteLine("Number of 1 bytes elements recieved: " + iotElement.numberOfOneByteElements);
 
                     for (int j = 0; j < iotElement.numberOfOneByteElements; j++)
                     {
@@ -85,7 +77,6 @@ namespace Codec8
 
                     iotElement.numberOfTwoByteElements = rb.ReadByte();
                     data.DataList.Add(iotElement.numberOfTwoByteElements);
-                    Console.WriteLine("Number of 2 bytes elements recieved: " + iotElement.numberOfTwoByteElements);
                     for (int m = 0; m < iotElement.numberOfTwoByteElements; m++)
                     {
                         iotElement.twoBytesID = rb.ReadByte();

@@ -22,8 +22,8 @@ namespace Server
         {
             while (true)
             {
-                TcpClient client = listener.AcceptTcpClient();
-                 handleClientData(client);
+                TcpClient client = await listener.AcceptTcpClientAsync();
+                handleClientData(client);
             }
         }
 
@@ -53,29 +53,32 @@ namespace Server
                 //reading zero bytes
                 byte[] zeroBytesBuffer = new byte[4];
                 int fourBytesRecieved = await nwStream.ReadAsync(zeroBytesBuffer, 0, zeroBytesBuffer.Length);
-
+                Console.WriteLine("zero bytes read");
                 //getting data array lenght
                 byte[] AvlDataArrayLenghtBuffer = new byte[4];
                 int dataArrayLenght = await nwStream.ReadAsync(AvlDataArrayLenghtBuffer, 0, AvlDataArrayLenghtBuffer.Length);
                 int iDataArrayLenght = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0);
+                Console.WriteLine("datalenght read");
 
                 //getting crc
                 byte[] crcBuffer = new byte[2];
                 int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
                 var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
+                Console.WriteLine("crc read");
 
                 //getting data array
                 byte[] AvlDataArrayBuffer = new byte[iDataArrayLenght];
                 int dataarray = await nwStream.ReadAsync(AvlDataArrayBuffer, 0, iDataArrayLenght);
+                Console.WriteLine("dataarray got");
                 DataDecoder datadecoder = new DataDecoder();
                 var AvlData = datadecoder.Decode(AvlDataArrayBuffer);
 
 
                 for (int i = 0; i < AvlData.Count; i++)
                 {
-                    DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
-                    long cdrTimestamp = (long)AvlData[1];
-                    serverLog.Date = epochStart.AddMilliseconds(cdrTimestamp);
+
+                    serverLog.Date = (DateTime)AvlData[1];
+
 
                     serverLog.Longitude = (int)AvlData[3];
                     serverLog.Latitude = (int)AvlData[4];
@@ -96,7 +99,7 @@ namespace Server
                         + "---" + " Latitude: " + serverLog.Latitude);
                     //add data to database
                     serverLogDataService.Add(serverLog);
-                    
+                    client.Client.Disconnect(false);
                     clientsCounter.Decrement();
                     Logger.Info("Clients online: " + clientsCounter.NextValue().ToString());
                 }
@@ -106,7 +109,7 @@ namespace Server
                     // resend data
                     Console.WriteLine("crc doesnt match");
                     Client.Client clientObject = new Client.Client();
-                    clientObject.SendData(client);
+                    await clientObject.SendData(client);
                 }
             }
         }
