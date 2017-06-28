@@ -9,7 +9,7 @@ namespace FMEmulator
     public class FMDataSimulator
     {
         private int numberOfData;
-        private string time;
+        private string time = "";
         private string priority;
         private string longitude;
         private string latitude;
@@ -39,13 +39,13 @@ namespace FMEmulator
 
             List<string> data = new List<string>();
 
-            numberOfData = random.Next(1, 6);
+            numberOfData = random.Next(10, 20);
             var sNumberOfData = numberOfData.ToString("X2");
             data.Add(sNumberOfData);
             for (int i = 0; i < numberOfData; i++)
             {
 
-                time = ((long)((DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds)).ToString("X16");
+                time = ((long)((DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds)).ToString("X16");
                 priority = random.Next(0, 2).ToString("X2");
                 data.Add(time);
                 data.Add(priority);              
@@ -67,10 +67,10 @@ namespace FMEmulator
                 
                 #endregion
 
-                ioEvent = random.Next(0, 2).ToString("X2");
+                ioEvent = random.Next(2, 2).ToString("X2");
                 data.Add(ioEvent);
 
-                numberOfIOElementsInRecord = random.Next(1, 11);
+                numberOfIOElementsInRecord = random.Next(1, 4);
                 var stringNumberOfIOElementsInRecord = numberOfIOElementsInRecord.ToString("X2");
                 data.Add(stringNumberOfIOElementsInRecord);
 
@@ -79,7 +79,7 @@ namespace FMEmulator
                 data.Add(sNumberOfOneByteElements);
 
                 Console.WriteLine("Number of 1 bytes elemenets sent: " + NumberOfOneByteElements);
-                for (int j = 0; j < numberOfIOElementsInRecord; j++)
+                for (int j = 0; j < NumberOfOneByteElements; j++)
                 {
                     oneByteId = random.Next(1, 100).ToString("X2");
                     data.Add(oneByteId);
@@ -88,7 +88,7 @@ namespace FMEmulator
                 }
 
                 int maxNumberOfTwoBytesElements = numberOfIOElementsInRecord - NumberOfOneByteElements;
-
+                Console.WriteLine("max number for 2 bytes: " + maxNumberOfTwoBytesElements);
 
 
                 numberOfTwobyteElements = random.Next(0, maxNumberOfTwoBytesElements);
@@ -129,6 +129,7 @@ namespace FMEmulator
                     data.Add(eightBytesValue);
                 }
             }
+            data.Add(sNumberOfData);
 
 
             DataEncoder dataencoder = new DataEncoder();

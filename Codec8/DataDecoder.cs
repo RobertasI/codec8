@@ -32,22 +32,20 @@ namespace Codec8
             }
 
             
-            int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 0, 2), 0);
-            data.DataList.Add(numberOfData);
+            //int numberOfData = BitConverter.ToInt16(StringConverter.ReadBytes(byteArray, 0, 2), 0);
+            //data.DataList.Add(numberOfData);
 
-            using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 1, byteArray.Length))))
+            using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 0, byteArray.Length))))
             {
-                //int numberOfData = rb.ReadInt16();
-                //data.DataList.Add(numberOfData);
+                int numberOfData = rb.ReadByte();
+                data.DataList.Add(numberOfData);
 
                 for (int i = 0; i < numberOfData; i++)
             {
 
-
-
                     var timeStamp = rb.ReadInt64();
 
-                    DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0);
+                    DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, 0);
                     DateTime result = epochStart.AddMilliseconds(timeStamp);
                     data.DataList.Add(result);
 
@@ -128,7 +126,7 @@ namespace Codec8
                         iotElement.eightBytesID = rb.ReadByte();
                         data.DataList.Add(iotElement.eightBytesID);
 
-                        iotElement.eightBytesValue = rb.ReadInt32();
+                        iotElement.eightBytesValue = rb.ReadInt64();
                         data.DataList.Add(iotElement.eightBytesValue);
                     }
                     #endregion
