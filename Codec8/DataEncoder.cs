@@ -19,15 +19,11 @@ namespace Codec8
             }
 
             var stringData = encodedToString.ToString();
-            Console.WriteLine(stringData);
-
            
             return Enumerable.Range(0, stringData.Length)
                 .Where(x => x % 2 == 0)
                 .Select(x => Byte.Parse(stringData.Substring(x, 2), NumberStyles.HexNumber))
                 .ToArray();
-       
-
         }
     }
 }

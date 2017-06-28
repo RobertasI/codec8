@@ -13,7 +13,6 @@ namespace FMEmulator
             DataDecoder dd = new DataDecoder();
 
             var listbytes = fm.GenerateAVLData();
-            //var listbytes = StringConverter.StringToByteArray();
             var list = dd.Decode(listbytes);
             foreach (var item in list)
             {
