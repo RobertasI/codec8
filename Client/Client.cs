@@ -23,15 +23,20 @@ namespace Client
         public async void StartClient()
         {
             //Console.WriteLine("Enter how many clients to create");
-           // var clientsWanted = Convert.ToInt32(Console.ReadLine());
+            // var clientsWanted = Convert.ToInt32(Console.ReadLine());
+            var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 TcpClient tcpClient = new TcpClient();
                 Client client = new Client();
                 tcpClient.Connect(client.SERVER_IP, client.PORT_NO);
                 await client.SendData(tcpClient);
             }
+
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            Console.WriteLine("Time elapsed: " + elapsedMs);
         }
 
         public async Task SendData(TcpClient client)
