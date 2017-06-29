@@ -1,4 +1,6 @@
 ﻿using FMEmulator;
+using System;
+using System.Linq;
 
 namespace Client
 {
@@ -10,19 +12,20 @@ namespace Client
         public byte[] Imei;
         public byte[] dataArray;
         public byte[] fourZeroBytes;
-        public int dataArrayLenght;
+        public byte[] dataArrayLenght;
         public int CRC;
         public byte[] CRCBytes;
+        public byte[] AvlDataHeader;
 
         public AVLPacket()
         {
             fourZeroBytes = new byte[] { 0, 0, 0, 0 };
             dataArray = fmdataSimulator.GenerateAVLData();
             Imei = randomImeiGenerator.GenerateRandomImeiBytes();
-            dataArrayLenght = dataArray.Length;
+            dataArrayLenght = BitConverter.GetBytes(dataArray.Length);
             CRC = crcCalculator.ComputeChecksum(dataArray);
             CRCBytes = crcCalculator.ComputeChecksumBytes(dataArray);
+            AvlDataHeader = fourZeroBytes.Concat(dataArrayLenght).ToArray();
         }
-                     
     }
 }

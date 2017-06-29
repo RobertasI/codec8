@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using log4net;
+using System.Linq;
 
 namespace Server
 {
@@ -39,6 +40,7 @@ namespace Server
                 //recieving IMEI
                 byte[] imeiBuffer = new byte[8];
                 var bytesCount = nwStream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
+                //Array.Reverse(imeiBuffer);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                 Logger.Info("IMEI Received: " + serverLog.Imei);
                 
@@ -50,26 +52,20 @@ namespace Server
                 clientsCounter.Increment();
                 Logger.Info("Clients online: " + clientsCounter.NextValue().ToString());
 
-                //reading zero bytes
-                byte[] zeroBytesBuffer = new byte[4];
-                int fourBytesRecieved = await nwStream.ReadAsync(zeroBytesBuffer, 0, zeroBytesBuffer.Length);
-                Console.WriteLine("zero bytes read");
-                //getting data array lenght
-                byte[] AvlDataArrayLenghtBuffer = new byte[4];
-                int dataArrayLenght = await nwStream.ReadAsync(AvlDataArrayLenghtBuffer, 0, AvlDataArrayLenghtBuffer.Length);
-                int iDataArrayLenght = BitConverter.ToInt16(AvlDataArrayLenghtBuffer, 0);
-                Console.WriteLine("datalenght read");
-
-                //getting crc
-                byte[] crcBuffer = new byte[2];
-                int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
-                var crcRecieved = BitConverter.ToInt16(crcBuffer, 0);
-                Console.WriteLine("crc read");
+                //reading header
+                byte[] AvlHeaderBuffer = new byte[8];
+                var AvlHeader = await nwStream.ReadAsync(AvlHeaderBuffer, 0, AvlHeaderBuffer.Length);
+                var AvlDataLenght = BitConverter.ToInt32(AvlHeaderBuffer.Skip(4).Take(4).ToArray(), 0);
 
                 //getting data array
-                byte[] AvlDataArrayBuffer = new byte[iDataArrayLenght];
-                int dataarray = await nwStream.ReadAsync(AvlDataArrayBuffer, 0, iDataArrayLenght);
-                Console.WriteLine("dataarray got");
+                byte[] AvlDataArrayBuffer = new byte[AvlDataLenght];
+                int dataarray = await nwStream.ReadAsync(AvlDataArrayBuffer, 0, AvlDataLenght);
+
+                //getting crc
+                byte[] crcBuffer = new byte[4];
+                int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
+                var crcRecieved = BitConverter.ToInt32(crcBuffer, 0);
+                
                 DataDecoder datadecoder = new DataDecoder();
                 var AvlData = datadecoder.Decode(AvlDataArrayBuffer);
 
@@ -78,8 +74,6 @@ namespace Server
                 {
 
                     serverLog.Date = (DateTime)AvlData[1];
-
-
                     serverLog.Longitude = (int)AvlData[3];
                     serverLog.Latitude = (int)AvlData[4];
                 }

@@ -15,5 +15,11 @@ namespace FMEmulator
                              .Select(x => Convert.ToByte(imei.Substring(x, 2), 16))
                              .ToArray();
         }
+
+        public byte[] gg()
+        {
+            
+        }
+
     }
 }
