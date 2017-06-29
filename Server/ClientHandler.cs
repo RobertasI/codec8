@@ -85,9 +85,7 @@ namespace Server
 
                 if (crcRecieved == crcCalculated)
                 {
-                    //add data to serverlog 
                     Console.WriteLine("crc matches");
-
                     //write needed data to console and file 
                     Logger.Info("Imei: " + serverLog.Imei + "---" + " Date: " + serverLog.Date + "---" + " Longitude: " + serverLog.Longitude 
                         + "---" + " Latitude: " + serverLog.Latitude);

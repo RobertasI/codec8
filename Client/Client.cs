@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using log4net;
-using Codec8;
 
 namespace Client
 {
@@ -26,7 +25,7 @@ namespace Client
             //Console.WriteLine("Enter how many clients to create");
            // var clientsWanted = Convert.ToInt32(Console.ReadLine());
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 TcpClient tcpClient = new TcpClient();
                 Client client = new Client();
@@ -56,20 +55,11 @@ namespace Client
 
                 await nwStream.WriteAsync(avlpacket.AvlDataHeader, 0, avlpacket.AvlDataHeader.Length);
 
-                Console.WriteLine("Data packet lenght: " + avlpacket.AvlDataHeader.Length);
-
-                //sending zero bytes
-                //await nwStream.WriteAsync(avlpacket.fourZeroBytes, 0, avlpacket.fourZeroBytes.Length);
-
-                //sending datalenght
-                //await nwStream.WriteAsync(BitConverter.GetBytes(avlpacket.dataArrayLenght), 0, 4);
-
                 //sending dataarray
                 await nwStream.WriteAsync(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
 
                 //sending crc 
                 await nwStream.WriteAsync(avlpacket.CRCBytes, 0, 2);
-
 
                 Logger.Info("Imei " + imei + " data has been sent");
             }

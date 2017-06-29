@@ -1,5 +1,4 @@
-﻿
-namespace Codec8
+﻿namespace Codec8
 {
     class GpsElement 
     {

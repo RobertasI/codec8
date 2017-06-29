@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using Codec8;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace FMEmulator
 {
