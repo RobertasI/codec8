@@ -1,0 +1,20 @@
+﻿@using Jmelosegui.Mvc.GoogleMap
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @(Html.GoogleMap()
+              .Name("map")
+              .Height(500)
+              .ApiKey("AIzaSyDbJWa9Pev7l3QTf131fxF5DidBkZzzp_k")
+        )
+    </div>
+</div>
+
+@section scripts
+{
+    @(Html.GoogleMap().ScriptRegistrar())
+}
