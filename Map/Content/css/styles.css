@@ -1,0 +1,14 @@
+﻿#map {
+    width: 50%;
+    height: 600px;
+    margin-right: 2em;
+}
+
+.map-container {
+    margin-top: 2em;
+    display: flex;
+}
+
+.map-container table td {
+    white-space: nowrap;
+}
