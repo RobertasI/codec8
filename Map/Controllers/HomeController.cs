@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Map.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +11,9 @@ namespace Map.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+
+            var entities = new ServerLogEntities();
+            return View(entities.ServerLogs.ToList());
         }
 
         public ActionResult About()

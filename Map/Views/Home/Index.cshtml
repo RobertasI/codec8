@@ -1,5 +1,35 @@
 ﻿<div id="map" style="width:70%;height:600px">My precious map</div>
 
+@{ ViewBag.Title = "Index";}
+
+@*<h2> Clients list</h2>
+
+@foreach (var item in Model)
+{
+    <p>@item.Id | @item.Imei| @item.Date</p>
+}*@
+
+<table id="map" style="width:30%;text-align:right">
+    <tr>
+        <th>Id</th>
+        <th>Imei</th>
+        <th>Date</th>
+        <th>Longitude</th>
+        <th>Latitude</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>@item.Id</td>
+        <td>@item.Imei</td>
+        <td>@item.Date</td>
+        <td>@item.Longitude</td>
+        <td>@item.Latitude</td>
+    </tr>
+    }
+</table>
+
+
 <script src="~/Scripts/map-scripts/map.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC88vtPNdfd1cjSxJSNr7rKlAD7XlgKP3c&callback=myMap"
         type="text/javascript"></script>

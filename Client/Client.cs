@@ -26,7 +26,7 @@ namespace Client
             // var clientsWanted = Convert.ToInt32(Console.ReadLine());
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 TcpClient tcpClient = new TcpClient();
                 Client client = new Client();
