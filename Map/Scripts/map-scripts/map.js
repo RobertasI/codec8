@@ -15,3 +15,4 @@ function addMarker() {
         map: map
     });
 }
+

@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Configuration;
 using System.Diagnostics;
+using Microsoft.Owin.Hosting;
 
 namespace Server
 {
@@ -17,6 +18,7 @@ namespace Server
             Server server = new Server();
             if (PerformanceCounterCategory.Exists(categoryName))
             {
+                server.StartWebApp();
                 server.StartServer();
                 Console.ReadLine();
             }
@@ -34,6 +36,7 @@ namespace Server
 
         public void StartServer()
         {
+
             //---listen at the specified IP and port no.---
             IPAddress localAdd = IPAddress.Parse(SERVER_IP);
             TcpListener listener = new TcpListener(localAdd, PORT_NO);
@@ -41,6 +44,13 @@ namespace Server
             Console.WriteLine("Listening... ");
             ClientHandler clientHandler = new ClientHandler();
             clientHandler.acceptClients(listener);
+        }
+
+        public void StartWebApp()
+        {
+            string url = "http://localhost:53212";
+            WebApp.Start(url);
+            Console.WriteLine("Server running on {0}", url);
         }
     }
 }
