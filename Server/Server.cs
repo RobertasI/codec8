@@ -18,7 +18,7 @@ namespace Server
             Server server = new Server();
             if (PerformanceCounterCategory.Exists(categoryName))
             {
-                server.StartWebApp();
+                //server.StartWebApp();
                 server.StartServer();
                 Console.ReadLine();
             }

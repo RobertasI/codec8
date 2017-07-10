@@ -7,7 +7,7 @@ namespace Client
     public class AVLPacket
     {
         FMDataSimulator fmdataSimulator = new FMDataSimulator();
-        RandomImeiGenerator randomImeiGenerator = new RandomImeiGenerator();
+        //RandomImeiGenerator randomImeiGenerator = new RandomImeiGenerator();
         CrcCalculator crcCalculator = new CrcCalculator();
         public byte[] Imei;
         public byte[] dataArray;
@@ -21,7 +21,7 @@ namespace Client
         {
             fourZeroBytes = new byte[] { 0, 0, 0, 0 };
             dataArray = fmdataSimulator.GenerateAVLData();
-            Imei = randomImeiGenerator.GenerateRandomImeiBytes();
+            //Imei = randomImeiGenerator.GenerateRandomImeiBytes();
             dataArrayLenght = BitConverter.GetBytes(dataArray.Length);
             CRC = crcCalculator.ComputeChecksum(dataArray);
             CRCBytes = crcCalculator.ComputeChecksumBytes(dataArray);

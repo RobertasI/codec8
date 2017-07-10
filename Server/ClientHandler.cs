@@ -101,7 +101,7 @@ namespace Server
                     // resend data
                     Console.WriteLine("crc doesnt match");
                     Client.Client clientObject = new Client.Client();
-                    await clientObject.SendData(client);
+                    await clientObject.SendData(client, imeiBuffer);
                 }
             }
         }
