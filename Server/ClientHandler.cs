@@ -43,66 +43,70 @@ namespace Server
                 //Array.Reverse(imeiBuffer);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                 Logger.Info("IMEI Received: " + serverLog.Imei);
-                
-                //writing answer to client, always 1 to send
-                byte[] acception = BitConverter.GetBytes(1);
-                await nwStream.WriteAsync(acception, 0, 1);
-
-                //add accepted client and print it in console and file
-                clientsCounter.Increment();
-                Logger.Info("Clients online: " + clientsCounter.NextValue().ToString());
-
-                //reading header
-                byte[] AvlHeaderBuffer = new byte[8];
-                var AvlHeader = await nwStream.ReadAsync(AvlHeaderBuffer, 0, AvlHeaderBuffer.Length);
-                var AvlDataLenght = BitConverter.ToInt32(AvlHeaderBuffer.Skip(4).Take(4).ToArray(), 0);
-
-                //getting data array
-                byte[] AvlDataArrayBuffer = new byte[AvlDataLenght];
-                int dataarray = await nwStream.ReadAsync(AvlDataArrayBuffer, 0, AvlDataLenght);
-
-                //getting crc
-                byte[] crcBuffer = new byte[4];
-                int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
-                var crcRecieved = BitConverter.ToInt32(crcBuffer, 0);
-                
-                DataDecoder datadecoder = new DataDecoder();
-                var AvlData = datadecoder.Decode(AvlDataArrayBuffer);
-
-
-                for (int i = 0; i < AvlData.Count; i++)
+                if (serverLog.Imei != 0)
                 {
+                    //writing answer to client, always 1 to send
+                    byte[] acception = BitConverter.GetBytes(1);
+                    await nwStream.WriteAsync(acception, 0, 1);
 
-                    serverLog.Date = (DateTime)AvlData[1];
-                    serverLog.Longitude = (int)AvlData[3];
-                    serverLog.Latitude = (int)AvlData[4];
-                }
-
-                //calculating  crc
-                CrcCalculator crccalculator = new CrcCalculator();
-                var crcCalculated = crccalculator.ComputeChecksum(AvlDataArrayBuffer);
-
-
-                if (crcRecieved == crcCalculated)
-                {
-                    Console.WriteLine("crc matches");
-                    //write needed data to console and file 
-                    Logger.Info("Imei: " + serverLog.Imei + "---" + " Date: " + serverLog.Date + "---" + " Longitude: " + serverLog.Longitude 
-                        + "---" + " Latitude: " + serverLog.Latitude);
-                    //add data to database
-                    serverLogDataService.Add(serverLog);
-                    client.Client.Disconnect(false);
-                    clientsCounter.Decrement();
+                    //add accepted client and print it in console and file
+                    clientsCounter.Increment();
                     Logger.Info("Clients online: " + clientsCounter.NextValue().ToString());
-                }
 
-                else
-                {
-                    // resend data
-                    Console.WriteLine("crc doesnt match");
-                    Client.Client clientObject = new Client.Client();
-                    await clientObject.SendData(client, imeiBuffer);
+                    //reading header
+                    byte[] AvlHeaderBuffer = new byte[8];
+                    var AvlHeader = await nwStream.ReadAsync(AvlHeaderBuffer, 0, AvlHeaderBuffer.Length);
+                    var AvlDataLenght = BitConverter.ToInt32(AvlHeaderBuffer.Skip(4).Take(4).ToArray(), 0);
+
+                    //getting data array
+                    byte[] AvlDataArrayBuffer = new byte[AvlDataLenght];
+                    int dataarray = await nwStream.ReadAsync(AvlDataArrayBuffer, 0, AvlDataLenght);
+
+                    //getting crc
+                    byte[] crcBuffer = new byte[4];
+                    int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
+                    var crcRecieved = BitConverter.ToInt32(crcBuffer, 0);
+
+                    DataDecoder datadecoder = new DataDecoder();
+                    var AvlData = datadecoder.Decode(AvlDataArrayBuffer);
+
+
+                    for (int i = 0; i < AvlData.Count; i++)
+                    {
+
+                        serverLog.Date = (DateTime)AvlData[1];
+                        serverLog.Longitude = (int)AvlData[3];
+                        serverLog.Latitude = (int)AvlData[4];
+                    }
+
+                    //calculating  crc
+                    CrcCalculator crccalculator = new CrcCalculator();
+                    var crcCalculated = crccalculator.ComputeChecksum(AvlDataArrayBuffer);
+
+
+                    if (crcRecieved == crcCalculated)
+                    {
+                        Console.WriteLine("crc matches");
+                        //write needed data to console and file 
+                        Logger.Info("Imei: " + serverLog.Imei + "---" + " Date: " + serverLog.Date + "---" + " Longitude: " + serverLog.Longitude
+                            + "---" + " Latitude: " + serverLog.Latitude);
+                        //add data to database
+                        serverLogDataService.Add(serverLog);
+                        client.Client.Disconnect(false);
+                        clientsCounter.Decrement();
+                        Logger.Info("Clients online: " + clientsCounter.NextValue().ToString());
+                    }
+
+                    else
+                    {
+                        // resend data
+                        Console.WriteLine("crc doesnt match");
+                        Client.Client clientObject = new Client.Client();
+                        //await clientObject.SendData(client, imeiBuffer);
+                    }
+
                 }
+               
             }
         }
 

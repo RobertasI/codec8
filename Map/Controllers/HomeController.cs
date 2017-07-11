@@ -29,5 +29,11 @@ namespace Map.Controllers
 
             return View();
         }
+
+        public ActionResult GetDataBaseData()
+        {
+            var entities = new ServerLogEntities();
+            return Json(entities.ServerLogs.ToList(), JsonRequestBehavior.AllowGet);
+        }
     }
 }
