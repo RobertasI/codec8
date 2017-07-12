@@ -27,23 +27,32 @@ namespace Client
         {
             //Console.WriteLine("Enter how many clients to create");
             // var clientsWanted = Convert.ToInt32(Console.ReadLine());
-            var imeiBytesList = new List<byte[]>();
+           List<byte[]> imeiBytesList = new List<byte[]>();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 RandomImeiGenerator randomImeiGenerator = new RandomImeiGenerator();
 
                 var randomImei = randomImeiGenerator.GenerateRandomImeiBytes();
                 imeiBytesList.Add(randomImei);
-            }
+            } 
+
+            foreach (var item in imeiBytesList)
+            {
+                Console.WriteLine(BitConverter.ToInt64(item, 0));
+            } 
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            
-            for (int i = 0; i < 3; i++)
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            while (true)
             {
-                Random random  = new Random();
-                byte[] randomImeiBytes = imeiBytesList[random.Next(imeiBytesList.Count)];
+                Thread.Sleep(8000);
+                Random random = new Random();
+                byte[] randomImeiBytes = new byte[8];
+                randomImeiBytes = imeiBytesList[random.Next(imeiBytesList.Count)];
 
                 TcpClient tcpClient = new TcpClient();
                 Client client = new Client();
@@ -52,6 +61,7 @@ namespace Client
                 await client.SendData(tcpClient, randomImeiBytes);
                 //GC.Collect();
             }
+            //}
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
@@ -62,10 +72,10 @@ namespace Client
         {
             NetworkStream nwStream = client.GetStream();
             AVLPacket avlpacket = new AVLPacket();
-
+            //byte[] imeiBytes = { };
             //send imei
-            await nwStream.WriteAsync(imeiBytes, 0, avlpacket.Imei.Length);
-            var imei = BitConverter.ToInt64(avlpacket.Imei, 0);
+            await nwStream.WriteAsync(imeiBytes, 0, imeiBytes.Length);
+            var imei = BitConverter.ToInt64(imeiBytes, 0);
             Logger.Info("Sending IMEI : " + imei);
 
 

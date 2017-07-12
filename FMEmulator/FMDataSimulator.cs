@@ -29,7 +29,6 @@ namespace FMEmulator
         private int numberOfEightbyteElements;
         private string eightBytesId;
         private string eightBytesValue;
-        //ArrayList data = new ArrayList();
         Random random = new Random();
 
         public byte[] GenerateAVLData()
@@ -49,8 +48,8 @@ namespace FMEmulator
                 data.Add(priority);              
 
                 #region GPSElements
-                longitude = random.Next(25000000, 30000000).ToString("X8");
-                latitude = random.Next(50000000, 60000000).ToString("X8");
+                longitude = random.Next(23000000, 26000000).ToString("X8");
+                latitude = random.Next(53000000, 56000000).ToString("X8");
                 altitude = random.Next(0, 32767).ToString("X4");
                 angle = random.Next(0, 32767).ToString("X4");
                 sattelites = random.Next(1, 15).ToString("X2");
