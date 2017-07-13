@@ -287,7 +287,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -334,6 +336,16 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Server.DataAccess\Server.DataAccess.csproj">
+      <Project>{082712A4-C73B-434E-B21C-37306A2424D5}</Project>
+      <Name>Server.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Server.Domain\Server.Domain.csproj">
+      <Project>{fcdb6d1f-76aa-4055-8aea-a08c98cf171f}</Project>
+      <Name>Server.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
