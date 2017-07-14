@@ -59,10 +59,10 @@ function addLines(dataList) {
             console.log("j = ", j)
 
             console.log("imeilistlenght: ", imeiList.length)
-            if (dataList[i] !== dataList[j]) {
+            if (dataList[i] !== imeiList[j]) {
                 imeiList.push(dataList[i]);
-                j++;
             }
+            j++;
         }
     }
 
