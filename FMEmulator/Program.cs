@@ -8,8 +8,6 @@ namespace FMEmulator
     {
         static void Main(string[] args)
         {
-
-
         }
     }
 }

@@ -9,15 +9,24 @@
 
 getDataFromController();
 
-function addMarker(long, lat) {
+function addMarker(imei, long, lat) {
+
+    var infowindow = new google.maps.InfoWindow({
+        content: String(imei)
+    });
+
     marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, long),
         map: map
     });
+    marker.addListener('click', function () {
+        infowindow.open(map, marker);
+    });
 }
 
-var dataList = [];
+
 function getDataFromController() {
+    var dataList = [];
     $.ajax({
         url: '/Home/GetDataBaseData',
         type: 'GET',
@@ -26,11 +35,11 @@ function getDataFromController() {
             // process the data coming back
             $.each(data, function (index, item) {
    
-                addMarker(item.Longitude / 1000000, item.Latitude / 1000000)
+                addMarker(item.Imei, item.Longitude / 1000000, item.Latitude / 1000000)
 
                 dataList.push({ ime: item.Imei, latitude: item.Latitude / 1000000, longitude: item.Longitude / 1000000 })
             });
-            addLines(dataList);
+            findUniqueImeis(dataList);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status);
@@ -39,9 +48,8 @@ function getDataFromController() {
     });
 }
 
-function addLines(dataList) {
+function findUniqueImeis(dataList) {
 
-    //apsiskaiciuoti visus skirtingus imei
     var imeiList = [dataList[0].ime];
     var dataListLenght = 0;
 
@@ -52,38 +60,52 @@ function addLines(dataList) {
     console.log(dataListLenght);
     
     for (var i = 1; i < dataListLenght; i++) {
-        console.log("i=", i)
-        //for (var j = 0; j < imeiList.lenght + 1; j++) {
         var j = 0;
+        var unique = true;
         while (j < imeiList.length) {
-            console.log("j = ", j)
-
-            console.log("imeilistlenght: ", imeiList.length)
-            if (dataList[i] !== imeiList[j]) {
-                imeiList.push(dataList[i]);
+            if (dataList[i].ime == imeiList[j]) {
+                unique = false;
+                j++
             }
-            j++;
+            else { j++; }
+        }
+        if (unique) {
+            imeiList.push(dataList[i].ime);
         }
     }
 
-    
     for (let item of imeiList) {
 
         console.log(item);
     }
-   
-
-    //var mapPath = new google.maps.Polyline({
-    //    path: dataList,
-    //    geodesic: true,
-    //    strokeColor: '#FF0000',
-    //    strokeOpacity: 1.0,
-    //    strokeWeight: 2
-    //});
-    //mapPath.setMap(map);
+ 
+    getDataForLines(imeiList, dataList);
 }
 
+function getDataForLines(imeiList, dataList) {
 
+    for (var i = 0; i < imeiList.length; i++) {
+        var data = [];
+        for (let item of dataList) {
 
-/////console.log(item.Longitude / 1000000, item.Latitude / 1000000)
-/////console.log(index, item.Imei);
+            if (imeiList[i] === item.ime) {
+                data.push({lat:item.latitude, lng:item.longitude});
+            }
+        }
+        console.log(data);
+        drawLines(data);
+    }
+}
+
+function drawLines(data) {
+
+    var mapPath = new google.maps.Polyline({
+        path: data,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 1
+    });
+    mapPath.setMap(map);
+
+}

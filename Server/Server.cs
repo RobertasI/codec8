@@ -18,17 +18,12 @@ namespace Server
             Server server = new Server();
             if (PerformanceCounterCategory.Exists(categoryName))
             {
-                //server.StartWebApp();
                 server.StartServer();
                 Console.ReadLine();
             }
             else
             {
-                string firstCounterName = "Clients online";
-                string firstCounterHelp = "Clients online live update";
-                string categoryHelp = "Clients related real time statistics";
-                PerformanceCounterCategory clientsCounter = new PerformanceCounterCategory(categoryName);
-                PerformanceCounterCategory.Create(categoryName, categoryHelp, PerformanceCounterCategoryType.SingleInstance, firstCounterName, firstCounterHelp);
+                server.CreatePerformanceCategory();
                 server.StartServer();
                 Console.ReadLine();
             }
@@ -46,11 +41,13 @@ namespace Server
             clientHandler.acceptClients(listener);
         }
 
-        public void StartWebApp()
+        public void CreatePerformanceCategory()
         {
-            string url = "http://localhost:53212";
-            WebApp.Start(url);
-            Console.WriteLine("Server running on {0}", url);
+            string firstCounterName = "Clients online";
+            string firstCounterHelp = "Clients online live update";
+            string categoryHelp = "Clients related real time statistics";
+            PerformanceCounterCategory clientsCounter = new PerformanceCounterCategory(categoryName);
+            PerformanceCounterCategory.Create(categoryName, categoryHelp, PerformanceCounterCategoryType.SingleInstance, firstCounterName, firstCounterHelp);
         }
     }
 }

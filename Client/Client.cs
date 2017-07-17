@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace Client
 {
     public class Client
-    {
+    { 
 
         private int PORT_NO = Convert.ToInt32(ConfigurationManager.AppSettings["port"]);
         private string SERVER_IP = ConfigurationManager.AppSettings["ip"];
@@ -25,8 +25,7 @@ namespace Client
 
         public async void StartClient()
         {
-            //Console.WriteLine("Enter how many clients to create");
-            // var clientsWanted = Convert.ToInt32(Console.ReadLine());
+
            List<byte[]> imeiBytesList = new List<byte[]>();
 
             for (int i = 0; i < 2; i++)
@@ -35,21 +34,13 @@ namespace Client
 
                 var randomImei = randomImeiGenerator.GenerateRandomImeiBytes();
                 imeiBytesList.Add(randomImei);
-            } 
-
-            foreach (var item in imeiBytesList)
-            {
-                Console.WriteLine(BitConverter.ToInt64(item, 0));
-            } 
+            }
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
-
-            //for (int i = 0; i < 10; i++)
-            //{
             while (true)
             {
-                Thread.Sleep(8000);
+                Thread.Sleep(5000);
                 Random random = new Random();
                 byte[] randomImeiBytes = new byte[8];
                 randomImeiBytes = imeiBytesList[random.Next(imeiBytesList.Count)];
@@ -59,10 +50,8 @@ namespace Client
                 tcpClient.Connect(client.SERVER_IP, client.PORT_NO);
 
                 await client.SendData(tcpClient, randomImeiBytes);
-                //GC.Collect();
             }
-            //}
-
+            
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             Console.WriteLine("Time elapsed: " + elapsedMs);
@@ -72,12 +61,10 @@ namespace Client
         {
             NetworkStream nwStream = client.GetStream();
             AVLPacket avlpacket = new AVLPacket();
-            //byte[] imeiBytes = { };
-            //send imei
+
             await nwStream.WriteAsync(imeiBytes, 0, imeiBytes.Length);
             var imei = BitConverter.ToInt64(imeiBytes, 0);
             Logger.Info("Sending IMEI : " + imei);
-
 
             byte[] bytesToRead = new byte[client.ReceiveBufferSize];
             int bytesRead = await nwStream.ReadAsync(bytesToRead, 0, client.ReceiveBufferSize);
@@ -86,9 +73,7 @@ namespace Client
 
             if (answerToImei == 1)
             {
-
                 Logger.Info("Imei " + imei + " is accepted");
-
 
                 await nwStream.WriteAsync(avlpacket.AvlDataHeader, 0, avlpacket.AvlDataHeader.Length);
 
@@ -99,8 +84,6 @@ namespace Client
                 await nwStream.WriteAsync(avlpacket.CRCBytes, 0, 2);
 
                 Logger.Info("Imei " + imei + " data has been sent");
-                //Thread.Sleep(2000);
-
             }
             else { Logger.Info("Imei " + imei + " is not accepted"); }
         }

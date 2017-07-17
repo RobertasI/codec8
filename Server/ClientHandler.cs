@@ -40,9 +40,9 @@ namespace Server
                 //recieving IMEI
                 byte[] imeiBuffer = new byte[8];
                 var bytesCount = nwStream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
-                //Array.Reverse(imeiBuffer);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                 Logger.Info("IMEI Received: " + serverLog.Imei);
+
                 if (serverLog.Imei != 0)
                 {
                     //writing answer to client, always 1 to send
@@ -70,7 +70,6 @@ namespace Server
                     DataDecoder datadecoder = new DataDecoder();
                     var AvlData = datadecoder.Decode(AvlDataArrayBuffer);
 
-
                     for (int i = 0; i < AvlData.Count; i++)
                     {
 
@@ -82,7 +81,6 @@ namespace Server
                     //calculating  crc
                     CrcCalculator crccalculator = new CrcCalculator();
                     var crcCalculated = crccalculator.ComputeChecksum(AvlDataArrayBuffer);
-
 
                     if (crcRecieved == crcCalculated)
                     {
@@ -102,10 +100,11 @@ namespace Server
                         // resend data
                         Console.WriteLine("crc doesnt match");
                         Client.Client clientObject = new Client.Client();
-                        //await clientObject.SendData(client, imeiBuffer);
+                        await clientObject.SendData(client, imeiBuffer);
                     }
 
                 }
+                else { return; }
                
             }
         }
