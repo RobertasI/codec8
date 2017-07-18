@@ -16,96 +16,96 @@ namespace Codec8
             IotElement iotElement = new IotElement();
             Data data = new Data();
 
-            using (ReversedBinaryReader rb = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 0, byteArray.Length))))
+            using (ReversedBinaryReader reversedbinary = new ReversedBinaryReader(new MemoryStream(StringConverter.ReadBytes(byteArray, 0, byteArray.Length))))
             {
-                int numberOfData = rb.ReadByte();
+                int numberOfData = reversedbinary.ReadByte();
                 data.DataList.Add(numberOfData);
 
                 for (int i = 0; i < numberOfData; i++)
             {
 
-                    var timeStamp = rb.ReadInt64();
+                    var timeStamp = reversedbinary.ReadInt64();
 
                     DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                    DateTime result = epochStart.AddMilliseconds(timeStamp);
-                    data.DataList.Add(result);
+                    DateTime time = epochStart.AddMilliseconds(timeStamp);
+                    data.DataList.Add(time);
 
-                    int priority = rb.ReadByte();
+                    int priority = reversedbinary.ReadByte();
                     data.DataList.Add(priority);
 
                     #region GPSElements
 
-                    gpsElement.Longitude = rb.ReadInt32();
+                    gpsElement.Longitude = reversedbinary.ReadInt32();
                     data.DataList.Add(gpsElement.Longitude);
 
-                    gpsElement.Latitude = rb.ReadInt32();
+                    gpsElement.Latitude = reversedbinary.ReadInt32();
                     data.DataList.Add(gpsElement.Latitude);
 
-                    gpsElement.Altitude = rb.ReadInt16();
+                    gpsElement.Altitude = reversedbinary.ReadInt16();
                     data.DataList.Add(gpsElement.Altitude);
 
-                    gpsElement.Angle = rb.ReadInt16();
+                    gpsElement.Angle = reversedbinary.ReadInt16();
                     data.DataList.Add(gpsElement.Angle);
 
-                    gpsElement.Satellites = rb.ReadByte();
+                    gpsElement.Satellites = reversedbinary.ReadByte();
                     data.DataList.Add(gpsElement.Satellites);
 
-                    gpsElement.Speed = rb.ReadInt16();
+                    gpsElement.Speed = reversedbinary.ReadInt16();
                     data.DataList.Add(gpsElement.Speed);
                     #endregion
 
                     #region IOelements
-                    iotElement.EventID = rb.ReadByte();
+                    iotElement.EventID = reversedbinary.ReadByte();
                     data.DataList.Add(iotElement.EventID);
 
-                    iotElement.NumberOfElements = rb.ReadByte();
+                    iotElement.NumberOfElements = reversedbinary.ReadByte();
                     data.DataList.Add(iotElement.NumberOfElements);
 
-                    iotElement.numberOfOneByteElements = rb.ReadByte();
+                    iotElement.numberOfOneByteElements = reversedbinary.ReadByte();
                     data.DataList.Add(iotElement.numberOfOneByteElements);
 
 
                     for (int j = 0; j < iotElement.numberOfOneByteElements; j++)
                     {
-                        iotElement.oneByteID = rb.ReadByte();
+                        iotElement.oneByteID = reversedbinary.ReadByte();
                         data.DataList.Add(iotElement.oneByteID);
 
-                        iotElement.oneByteValue = rb.ReadByte();
+                        iotElement.oneByteValue = reversedbinary.ReadByte();
                         data.DataList.Add(iotElement.oneByteValue);
                     }
 
-                    iotElement.numberOfTwoByteElements = rb.ReadByte();
+                    iotElement.numberOfTwoByteElements = reversedbinary.ReadByte();
                     data.DataList.Add(iotElement.numberOfTwoByteElements);
                     for (int m = 0; m < iotElement.numberOfTwoByteElements; m++)
                     {
-                        iotElement.twoBytesID = rb.ReadByte();
+                        iotElement.twoBytesID = reversedbinary.ReadByte();
                         data.DataList.Add(iotElement.twoBytesID);
 
-                        iotElement.twoBytesValue = rb.ReadInt16();
+                        iotElement.twoBytesValue = reversedbinary.ReadInt16();
                         data.DataList.Add(iotElement.twoBytesValue);
                     }
 
-                    iotElement.numberOfFourByteElements = rb.ReadByte();
+                    iotElement.numberOfFourByteElements = reversedbinary.ReadByte();
                     data.DataList.Add(iotElement.numberOfFourByteElements);
 
                     for (int n = 0; n < iotElement.numberOfFourByteElements; n++)
                     {
-                        iotElement.fourBytesID = rb.ReadByte();
+                        iotElement.fourBytesID = reversedbinary.ReadByte();
                         data.DataList.Add(iotElement.fourBytesID);
 
-                        iotElement.fourBytesValue = rb.ReadInt32();
+                        iotElement.fourBytesValue = reversedbinary.ReadInt32();
                         data.DataList.Add(iotElement.fourBytesValue);
                     }
 
-                    iotElement.numberOfEightByteElements = rb.ReadByte();
+                    iotElement.numberOfEightByteElements = reversedbinary.ReadByte();
                     data.DataList.Add(iotElement.numberOfEightByteElements);
 
                     for (int o = 0; o < iotElement.numberOfEightByteElements; o++)
                     {
-                        iotElement.eightBytesID = rb.ReadByte();
+                        iotElement.eightBytesID = reversedbinary.ReadByte();
                         data.DataList.Add(iotElement.eightBytesID);
 
-                        iotElement.eightBytesValue = rb.ReadInt64();
+                        iotElement.eightBytesValue = reversedbinary.ReadInt64();
                         data.DataList.Add(iotElement.eightBytesValue);
                     }
                     #endregion

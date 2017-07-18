@@ -35,11 +35,11 @@ namespace Server
 
             ServerLogDataService serverLogDataService = new ServerLogDataService();
 
-            using (NetworkStream nwStream = client.GetStream())
+            using (NetworkStream networkstream = client.GetStream())
             {
                 //recieving IMEI
                 byte[] imeiBuffer = new byte[8];
-                var bytesCount = nwStream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
+                var numberOfImeiBytesRead = networkstream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                 Logger.Info("IMEI Received: " + serverLog.Imei);
 
@@ -47,7 +47,7 @@ namespace Server
                 {
                     //writing answer to client, always 1 to send
                     byte[] acception = BitConverter.GetBytes(1);
-                    await nwStream.WriteAsync(acception, 0, 1);
+                    await networkstream.WriteAsync(acception, 0, 1);
 
                     //add accepted client and print it in console and file
                     clientsCounter.Increment();
@@ -55,16 +55,16 @@ namespace Server
 
                     //reading header
                     byte[] AvlHeaderBuffer = new byte[8];
-                    var AvlHeader = await nwStream.ReadAsync(AvlHeaderBuffer, 0, AvlHeaderBuffer.Length);
+                    var numberOfAvlHeaderBytesRead = await networkstream.ReadAsync(AvlHeaderBuffer, 0, AvlHeaderBuffer.Length);
                     var AvlDataLenght = BitConverter.ToInt32(AvlHeaderBuffer.Skip(4).Take(4).ToArray(), 0);
 
                     //getting data array
                     byte[] AvlDataArrayBuffer = new byte[AvlDataLenght];
-                    int dataarray = await nwStream.ReadAsync(AvlDataArrayBuffer, 0, AvlDataLenght);
+                    var numberOfDataArrayBytesRead = await networkstream.ReadAsync(AvlDataArrayBuffer, 0, AvlDataLenght);
 
                     //getting crc
                     byte[] crcBuffer = new byte[4];
-                    int crc = await nwStream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
+                    var numberOfCRCBytesRead = await networkstream.ReadAsync(crcBuffer, 0, crcBuffer.Length);
                     var crcRecieved = BitConverter.ToInt32(crcBuffer, 0);
 
                     DataDecoder datadecoder = new DataDecoder();

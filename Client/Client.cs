@@ -59,15 +59,15 @@ namespace Client
 
         public async Task SendData(TcpClient client, byte[] imeiBytes )
         {
-            NetworkStream nwStream = client.GetStream();
+            NetworkStream networkstream = client.GetStream();
             AVLPacket avlpacket = new AVLPacket();
 
-            await nwStream.WriteAsync(imeiBytes, 0, imeiBytes.Length);
+            await networkstream.WriteAsync(imeiBytes, 0, imeiBytes.Length);
             var imei = BitConverter.ToInt64(imeiBytes, 0);
             Logger.Info("Sending IMEI : " + imei);
 
             byte[] bytesToRead = new byte[client.ReceiveBufferSize];
-            int bytesRead = await nwStream.ReadAsync(bytesToRead, 0, client.ReceiveBufferSize);
+            int numberOfBytesRead = await networkstream.ReadAsync(bytesToRead, 0, client.ReceiveBufferSize);
 
             short answerToImei = BitConverter.ToInt16(bytesToRead, 0);
 
@@ -75,13 +75,13 @@ namespace Client
             {
                 Logger.Info("Imei " + imei + " is accepted");
 
-                await nwStream.WriteAsync(avlpacket.AvlDataHeader, 0, avlpacket.AvlDataHeader.Length);
+                await networkstream.WriteAsync(avlpacket.AvlDataHeader, 0, avlpacket.AvlDataHeader.Length);
 
                 //sending dataarray
-                await nwStream.WriteAsync(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
+                await networkstream.WriteAsync(avlpacket.dataArray, 0, avlpacket.dataArray.Length);
 
                 //sending crc 
-                await nwStream.WriteAsync(avlpacket.CRCBytes, 0, 2);
+                await networkstream.WriteAsync(avlpacket.CRCBytes, 0, 2);
 
                 Logger.Info("Imei " + imei + " data has been sent");
             }
