@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMEmulator", "FMEmulator\FM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Map", "Map\Map.csproj", "{82E077EC-C255-40E6-ACA8-CDBEF0127683}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "das", "das\das.csproj", "{C4D0EF2A-7FBA-4A30-B632-7312B5F72592}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -66,6 +68,10 @@ Global
 		{82E077EC-C255-40E6-ACA8-CDBEF0127683}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82E077EC-C255-40E6-ACA8-CDBEF0127683}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82E077EC-C255-40E6-ACA8-CDBEF0127683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4D0EF2A-7FBA-4A30-B632-7312B5F72592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4D0EF2A-7FBA-4A30-B632-7312B5F72592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4D0EF2A-7FBA-4A30-B632-7312B5F72592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4D0EF2A-7FBA-4A30-B632-7312B5F72592}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
