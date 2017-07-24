@@ -80,6 +80,7 @@ function findUniqueImeis(dataList) {
     }
  
     getDataForLines(imeiList, dataList);
+    getDataForDistance(imeiList, dataList);
 }
 
 function getDataForLines(imeiList, dataList) {
@@ -107,5 +108,31 @@ function drawLines(data) {
         strokeWeight: 1
     });
     mapPath.setMap(map);
+}
 
+function getDataFor(imeiList, dataList) {
+    for (var i = 0; i < imeiList.length; i++) {
+        var data = [];
+        for (let item of dataList) {
+
+            if (imeiList[i] === item.ime) {
+                data.push({lat: item.latitude, lng: item.longitude });
+            }
+        }
+        calculateDistance(data);
+    }
+}
+
+function calculateDistance(data) {
+    const pi = 0.017453292519943295;    // Math.PI / 180
+    const cos = Math.cos;
+    let distance = 0;
+
+    for (let i = 0; i < data.length; i++) {
+        let distance = 0.5 - cos((data[i + 1].lat - data[i].lat) * pi) / 2 +
+            cos(data[i].lat * pi) * cos(data[i + 1].lat * pi) *
+            (1 - cos((data[i + 1].lng - data[i].lng) * pi)) / 2;
+    }
+    
+    return 12742 * Math.asin(Math.sqrt(disntace)); // 2 * R; R = 6371 km
 }

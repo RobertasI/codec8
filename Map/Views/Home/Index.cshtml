@@ -12,6 +12,7 @@
                 <th>Date</th>
                 <th>Longitude</th>
                 <th>Latitude</th>
+                <th>Distance Travelled</th>
             </tr>
             @foreach (var item in Model)
             {
@@ -21,8 +22,9 @@
                     <td>@item.Date</td>
                     <td>@item.Longitude</td>
                     <td>@item.Latitude</td>
+                    <div id="dist"><td></td></div>
                 </tr> 
-            }
+            } 
         </table>
     </div>
 </div>
