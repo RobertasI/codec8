@@ -110,29 +110,38 @@ function drawLines(data) {
     mapPath.setMap(map);
 }
 
-function getDataFor(imeiList, dataList) {
+function getDataForDistance(imeiList, dataList) {
     for (var i = 0; i < imeiList.length; i++) {
         var data = [];
         for (let item of dataList) {
 
             if (imeiList[i] === item.ime) {
-                data.push({lat: item.latitude, lng: item.longitude });
+                data.push({lat:item.latitude, lng:item.longitude });
             }
         }
-        calculateDistance(data);
+        console.log("distance object array: ", data);
+        calculateDistance(imeiList[i], data);
     }
 }
 
-function calculateDistance(data) {
-    const pi = 0.017453292519943295;    // Math.PI / 180
+// gauti imei ir skaiciu, kiek nukeliavo tas imei
+
+function calculateDistance(imei, data) {
+    const pi = 0.017453292519943295;
     const cos = Math.cos;
     let distance = 0;
 
-    for (let i = 0; i < data.length; i++) {
-        let distance = 0.5 - cos((data[i + 1].lat - data[i].lat) * pi) / 2 +
+    if (data.length <= 1) {
+        return;
+    }
+
+    for (let i = 0; i < data.length - 1; i++) {
+        let dist = 0.5 - cos((data[i + 1].lat - data[i].lat) * pi) / 2 +
             cos(data[i].lat * pi) * cos(data[i + 1].lat * pi) *
             (1 - cos((data[i + 1].lng - data[i].lng) * pi)) / 2;
+        temp = 12742 * Math.asin(Math.sqrt(dist));
+        distance = distance + temp;
     }
-    
-    return 12742 * Math.asin(Math.sqrt(disntace)); // 2 * R; R = 6371 km
+
+    console.log("distances: ", imei, distance);
 }

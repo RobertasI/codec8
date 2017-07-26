@@ -38,7 +38,7 @@ namespace Server
             using (NetworkStream networkstream = client.GetStream())
             {
                 //recieving IMEI
-                byte[] imeiBuffer = new byte[8];
+                byte[] imeiBuffer = new byte[15];
                 var numberOfImeiBytesRead = networkstream.ReadAsync(imeiBuffer, 0, imeiBuffer.Length);
                 serverLog.Imei = BitConverter.ToInt64(imeiBuffer, 0);
                 Logger.Info("IMEI Received: " + serverLog.Imei);
