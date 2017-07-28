@@ -9,8 +9,6 @@ namespace Server
 {
     public class PerformanceCategory
     {
-        
-
         public void CreatePerformanceCategory(string categoryName)
         {
             string firstCounterName = "Clients online";
@@ -19,6 +17,5 @@ namespace Server
             PerformanceCounterCategory clientsCounter = new PerformanceCounterCategory(categoryName);
             PerformanceCounterCategory.Create(categoryName, categoryHelp, PerformanceCounterCategoryType.SingleInstance, firstCounterName, firstCounterHelp);
         }
-
     }
 }
